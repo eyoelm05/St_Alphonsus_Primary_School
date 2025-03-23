@@ -1,7 +1,6 @@
 <?php
 //autoload.php: helps the system interpret library classes such as dotenv.
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use Dotenv\Dotenv;
 
 class Database {
@@ -14,7 +13,7 @@ class Database {
 
     public function __construct() {
         //Code from: https://github.com/vlucas/phpdotenv
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '/../');
+        $dotenv = Dotenv::createImmutable(realpath(__DIR__ . '/../'));
         $dotenv->load();
 
         //My code starts
@@ -26,7 +25,7 @@ class Database {
     }
 
     public function connect(){
-        $thic->conn = null;
+        $this->conn = null;
 
         try{
             $dbattr = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4";
