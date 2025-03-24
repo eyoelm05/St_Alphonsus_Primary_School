@@ -1,19 +1,19 @@
 <?php
     class User {
         //Variable for db connection
-        private $conn;
+        protected $conn;
 
         //Properties of user
-        private $username;
-        private $first_name;
-        private $middle_initial;
-        private $last_name;
-        private $phone_no;
-        private $email;
-        private $address;
-        private $sex;
-        private $user_type;
-        private $password_hash;
+        protected $username;
+        protected $first_name;
+        protected $middle_initial;
+        protected $last_name;
+        protected $phone_no;
+        protected $email;
+        protected $address;
+        protected $sex;
+        protected $user_type;
+        protected $password_hash;
 
         public function __construct($db){
             $this -> conn = $db;
@@ -68,6 +68,28 @@
             } else {
                 return true;
             }    
+        }
+    }
+
+    class Parent_User extends User {
+        public function __construct($db){
+            parent::__construct($db);
+        }
+
+        public function register(){
+            //First register user
+            if(parent::register()){
+                $query = "INSERT INTO parents(username) VALUES (:username)";
+                $stmt = $this->conn->prepare($query);
+
+                if($stmt->execute([
+                    "username" => $this->username
+                ])){
+                    return true;
+                }
+                return false;
+                
+            }
         }
     }
 ?>
