@@ -21,17 +21,48 @@
 
         //Setter functions for each value
         public function set_username($username){
-            //Use preg_match to make sure that username should have the same pattern as the regular expression.
+            //Make sure username exists
             if(empty($username)){
-                throw new Exception("Username can not be empty");
+                throw new Exception("Username can not be empty!");
             }
             //Use preg_match to make sure that username should have the same pattern as the regular expression. Trim is used to get rid of white space.
             elseif (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', trim($username))) {
                 throw new Exception("Invalid username! Must be 3-20 characters long and contain only letters, numbers, or underscores.");
             };
+            //Assign Value
             $this->username = $username;
         }
 
+        public function setName($first_name, $middle_initial, $last_name) {
+            // Trim whitespace
+            $first_name = trim($first_name);
+            $middle_initial = trim($middle_initial);
+            $last_name = trim($last_name);
+        
+            // Check if first and last name are empty
+            if (empty($first_name)) {
+                throw new Exception("First name cannot be empty!");
+            }
+            if (empty($last_name)) {
+                throw new Exception("Last name cannot be empty!");
+            }
+        
+            // Ensure names contain only letters
+            if (!ctype_alpha($first_name) || !ctype_alpha($last_name)) {
+                throw new Exception("Names must contain only alphabetic characters.");
+            }
+        
+            // Middle initial is optional, but if provided, must be a single alphabetic character
+            if (!empty($middle_initial) && (!ctype_alpha($middle_initial) || strlen($middle_initial) > 1)) {
+                throw new Exception("Middle initial must be a single letter.");
+            }
+        
+            // Assign values
+            $this->first_name = $first_name;
+            $this->middle_initial = $middle_initial;
+            $this->last_name = $last_name;
+        }
+        
         //Create User method
         public function register(){
             //Query used to insert a user
