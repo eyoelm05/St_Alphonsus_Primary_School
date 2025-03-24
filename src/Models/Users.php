@@ -19,6 +19,19 @@
             $this -> conn = $db;
         }
 
+        //Setter functions for each value
+        public function set_username($username){
+            //Use preg_match to make sure that username should have the same pattern as the regular expression.
+            if(empty($username)){
+                throw new Exception("Username can not be empty");
+            }
+            //Use preg_match to make sure that username should have the same pattern as the regular expression. Trim is used to get rid of white space.
+            elseif (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', trim($username))) {
+                throw new Exception("Invalid username! Must be 3-20 characters long and contain only letters, numbers, or underscores.");
+            };
+            $this->username = $username;
+        }
+
         //Create User method
         public function register(){
             //Query used to insert a user
@@ -72,6 +85,7 @@
     }
 
     class Parent_User extends User {
+        //Connect to db using the parent class
         public function __construct($db){
             parent::__construct($db);
         }
