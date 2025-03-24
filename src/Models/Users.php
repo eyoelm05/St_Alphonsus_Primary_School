@@ -6,7 +6,7 @@
         //Properties of user
         private $username;
         private $first_name;
-        private $middle_intial;
+        private $middle_initial;
         private $last_name;
         private $phone_no;
         private $address;
@@ -20,18 +20,41 @@
 
         //Create User
         public function register(){
+            //Query used to insert a user
+            $query = "INSERT INTO users (username, first_name, middle_initial, last_name, email, phone_no, address, sex, user_type, password_hash) 
+          VALUES (:username, :first_name, :middle_initial, :last_name, :email, :phone_no, :address, :sex, :user_type, :password_hash)";
 
+
+            //Prepare statement
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute([
+                "username" => $this->username,
+                "first_name" => $this->first_name,
+                "middle_intial" => $this->middle_initial,
+                "last_name" => $this->last_name ,
+                "email" => $this->email,
+                "phone_no" => $this->phone_no,
+                "address" => $this->address,
+                "sex" => $this->sex,
+                "user_type" => $this->user_type,
+                "password_hash" => $this->password_hash
+            ])){
+                return true;
+            }
+
+            return false;
         }
 
         //Check if user exists
         public function check_user(){
-            //Database Query
+            //Query to count if there is a user with a specfic username
             $query = 'SELECT COUNT(*) AS no_user FROM users WHERE username = :username';
 
             //Prepare statement: Used to prepate sql query without the data.
             $stmt = $this->conn->prepare($query);
 
-            //Execute the query with the data
+            //Execute the query with the data securely 
             $stmt->execute(array("username" => $this->username));
             $row = $stmt->fetch();
 
