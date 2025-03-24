@@ -18,7 +18,7 @@
             $this -> conn = $db;
         }
 
-        //Create User
+        //Create User method
         public function register(){
             //Query used to insert a user
             $query = "INSERT INTO users (username, first_name, middle_initial, last_name, email, phone_no, address, sex, user_type, password_hash) 
@@ -31,7 +31,7 @@
             if($stmt->execute([
                 "username" => $this->username,
                 "first_name" => $this->first_name,
-                "middle_intial" => $this->middle_initial,
+                "middle_initial" => $this->middle_initial,
                 "last_name" => $this->last_name ,
                 "email" => $this->email,
                 "phone_no" => $this->phone_no,
