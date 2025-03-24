@@ -9,6 +9,7 @@
         private $middle_initial;
         private $last_name;
         private $phone_no;
+        private $email;
         private $address;
         private $sex;
         private $user_type;
