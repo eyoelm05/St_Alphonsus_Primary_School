@@ -34,7 +34,7 @@
             $this->username = $username;
         }
 
-        public function setName($first_name, $middle_initial, $last_name) {
+        public function set_name($first_name, $middle_initial, $last_name) {
             // Trim whitespace
             $first_name = trim($first_name);
             $middle_initial = trim($middle_initial);
