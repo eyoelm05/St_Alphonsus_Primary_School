@@ -78,7 +78,23 @@
             }
             $this->phone_no = $phone_no;
         }
-        
+
+        public function set_email($email){
+            //Trim white space
+            $email = trim($email);
+
+            //Check if email exists
+            if(empty($email)){
+                throw new Exception("Email can't be empty!");
+            }
+            //Check if email is valid
+            if(!preg_match('/^[a-zA-Z0-9_]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,}$/',$email)){
+                throw new Exception("Invalid Email! Please enter a proper email such as: josh123@example.com.");
+            }
+
+            $this->email = $email;
+        }
+
         //Create User method
         public function register(){
             //Query used to insert a user
