@@ -98,11 +98,28 @@
         public function set_address($address){
             //Trim white space
             $address = trim($address);
+
+            //Check if address exists
             if(empty($address)){
                 throw new Exception("Address can't be empty!");
             }
 
             $this->address = $address;
+        }
+
+        public function set_sex($sex){
+            //Trim white space
+            $sex = trim($sex);
+
+            //Check if sex exists
+            if(empty($sex)){
+                throw new Exception("Sex can't be empty!");
+            }
+
+            //Make sure sex is inputed correctly
+            if($sex == "M" || $sex == "F" || $sex == "O"){
+                throw new Exception("Sex can't be anything other than male, female or other");
+            }
         }
 
         //Create User method
