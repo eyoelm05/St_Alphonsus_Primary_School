@@ -43,6 +43,21 @@
         $user->set_sex(htmlspecialchars($data->sex));
         $user->set_user_type(htmlspecialchars($data->user_type));
         $user->set_password(htmlspecialchars($data->password));
+
+            
+        if($user->check_user()){
+            if($user->register()){
+                echo json_encode(
+                    array(
+                        "message" => "User created succefully"
+                    )
+                );
+            }else{
+                throw new Exception("Server Error.");
+            }
+        }else{
+            throw new Exception("User already exists!");
+        }
     } catch(Exception $e){
         echo json_encode(
             array(
