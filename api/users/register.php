@@ -33,14 +33,21 @@
     //My code
     //Sanitize data using htmlspecialchars()
     //Use setters to set values in user object
-    $user->set_username(htmlspecialchars($data->username));
-    $user->set_name(htmlspecialchars($data->first_name, $data->middle_initial, $data->last_name));
-    $user->set_phone_no(htmlspecialchars($data->phone_no));
-    $user->set_email(htmlspecialchars($data->email));
-    $user->set_address(htmlspecialchars($data->address));
-    $user->set_sex(htmlspecialchars($data->sex));
-    $user->set_user_type(htmlspecialchars($data->user_type));
-    $user->set_password(htmlspecialchars($data->password));
-    
-    
+
+    try{
+        $user->set_username(htmlspecialchars($data->username));
+        $user->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
+        $user->set_phone_no(htmlspecialchars($data->phone_no));
+        $user->set_email(htmlspecialchars($data->email));
+        $user->set_address(htmlspecialchars($data->address));
+        $user->set_sex(htmlspecialchars($data->sex));
+        $user->set_user_type(htmlspecialchars($data->user_type));
+        $user->set_password(htmlspecialchars($data->password));
+    } catch(Exception $e){
+        echo json_encode(
+            array(
+                "message" => $e->getMessage()
+            )
+        );
+    }
 ?>
