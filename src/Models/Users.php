@@ -122,6 +122,69 @@
             }
         }
 
+        public function set_password($password){
+            //Trim white space
+            $password = trim($password);
+
+            //Check if password has 8 characters
+            if(strlen($password) < 8){
+                throw new Exception("Password must have at least 8 characters!");
+            }
+
+            //Array to check that the password contains upper case, lower case, digits and special characters
+            //Why array: to be able to loop through them and handle exceptions easily
+            $check_arr = array(
+                "upper" => false,
+                "lower" => false,
+                "digit" => false,
+                "special" => false
+            ); 
+
+
+            //Loop over each character in the password and check if the character type.
+            //This code is a slightly modified version of the password verification we learned in class.
+            for($i=0; $i< strlen($password);$i++){
+                $chr = $password[$i];
+
+                if(ctype_upper($chr)){
+                    $check_arr["upper"] = true;
+                }
+                elseif(ctype_lower($chr)){
+                    $check_arr["lower"] = true;
+                }
+                elseif(ctype_digit($chr)){
+                    $check_arr["digit"] = true;
+                }
+                elseif(!ctype_alnum($chr)){
+                    $check_arr["special"] = true;
+                }
+            }
+
+            //Create the Error string
+            $err_str = "Your password must contain: ";
+
+            //Loop over the check_arr and add value's that don't exist to the Error string in a readable format.
+            foreach($check_arr as $key => $value){
+                if($value){
+                    continue;
+                }
+                if($key == "upper" || $key == "lower"){
+                    $err_str .= "\n".ucfirst($key). " case";
+                }elseif($key == "special"){
+                    $err_str .= "\n".ucfirst($key)." characters";
+                }else{
+                    $err_str .= "\n".ucfirst($key)."s";
+                }
+            }
+
+            //Hash the password if the password has everything required. Else send the error string as an exception.
+            if($check_arr["upper"] && $check_arr["lower"] && $check_arr["digit"] && $check_arr["special"]){
+                $this->password_hash = password_hash($password, PASSWORD_DEFAULT);
+            }else{
+                throw new Exception($err_str);
+            }
+        }
+
         //Create User method
         public function register(){
             //Query used to insert a user
