@@ -273,7 +273,6 @@
                     return true;
                 }
                 return false;
-                
             }
         }
     }
@@ -336,5 +335,30 @@
             $this->employee_type = $employee_type;
         }
 
+        public function register(){
+            //First register user
+            if(parent::register()){
+                //Query to insert employee
+                $query = "INSERT INTO employee (username, background_check, date_of_birth, employee_type, start_date)
+                             VALUES (:username, :background_check, :date_of_birth, :employee_type, :start_date)";
+
+                //Prepare query to be executed
+                $stmt = $this->conn->prepare($query);
+
+                //Execute query with it's binding params
+                if($stmt->execute([
+                    "username" => $this->username,
+                    "background_check" => $this->background_check,
+                    "date_of_birth" => $this->date_of_birth,
+                    "employee_type" => $this->employee_type,
+                    "start_date" => $this->start_date
+                ])){
+                    return true;
+                }
+                return false;
+            }
+        }
+
     }
+
 ?>
