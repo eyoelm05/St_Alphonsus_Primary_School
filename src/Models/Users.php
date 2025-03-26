@@ -23,7 +23,7 @@
         public function set_username($username){
             //Make sure username exists
             if(empty($username)){
-                throw new Exception("Username can not be empty!");
+                throw new Exception("Username can't be empty!");
             }
             //Use preg_match to make sure that username should have the same pattern as the regular expression. Trim is used to get rid of white space.
             if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', trim($username))) {
@@ -42,10 +42,10 @@
         
             // Check if first and last name are empty
             if (empty($first_name)) {
-                throw new Exception("First name cannot be empty!");
+                throw new Exception("First name can't be empty!");
             }
             if (empty($last_name)) {
-                throw new Exception("Last name cannot be empty!");
+                throw new Exception("Last name can't be empty!");
             }
         
             // Ensure names contain only letters
@@ -93,6 +93,16 @@
             }
 
             $this->email = $email;
+        }
+
+        public function set_address($address){
+            //Trim white space
+            $address = trim($address);
+            if(empty($address)){
+                throw new Exception("Address can't be empty!");
+            }
+
+            $this->address = $address;
         }
 
         //Create User method
