@@ -116,7 +116,7 @@
                 throw new Exception("Sex can't be empty!");
             }
 
-            //Make sure sex is inputed correctly
+            //Make sure sex is inputted correctly
             if($sex !== "M" && $sex !== "F" && $sex !== "O"){
                 throw new Exception("Sex can't be anything other than male, female or other");
             }
@@ -233,10 +233,10 @@
 
         //Check if user exists
         public function check_user(){
-            //Query to count if there is a user with a specfic username
+            //Query to count if there is a user with a specific username
             $query = 'SELECT COUNT(*) AS no_user FROM users WHERE username = :username';
 
-            //Prepare statement: Used to prepate sql query without the data.
+            //Prepare statement: Used to prepare sql query without the data.
             $stmt = $this->conn->prepare($query);
 
             //Execute the query with the data securely 
@@ -280,7 +280,7 @@
     }
 
     Class Employee_User extends User{
-        //Properties specfic to employee
+        //Properties specific to employee
         protected $background_check;
         protected $date_of_birth;
         protected $employee_type;
@@ -293,6 +293,8 @@
 
         //Setters for each value
         public function set_background_check($background_check){
+            //Fix conversion problem caused by json decode.
+            settype($background_check, "boolean");
             //Check if background check is a boolean.
             if(!is_bool($background_check)){
                 throw new Exception ("Background check can only be true or false");
@@ -303,7 +305,7 @@
 
         public function set_date_of_birth($date_of_birth){
 
-            //Check if date of birht exists
+            //Check if date of birth exists
             if(empty($date_of_birth)){
                 throw new Exception ("Date of birth can't be empty!");
             }
@@ -314,7 +316,7 @@
         public function set_start_date($start_date){
             //Check if start date exists
             if(empty($start_date)){
-                throw new Exception ("Date of birth can't be empty!");
+                throw new Exception ("Start date can't be empty!");
             }
 
             $this->start_date = $start_date;
@@ -331,7 +333,7 @@
 
             //Make sure employee type is T or TA
             if($employee_type !== "T" && $employee_type !== "TA"){
-                throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assitant)");
+                throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)");
             }
 
             $this->employee_type = $employee_type;
@@ -372,8 +374,8 @@
         }
 
         public function register(){
-            //Calls regsiter function on Employee User
-            if(parent::regsiter()){
+            //Calls register function on Employee User
+            if(parent::register()){
                 $query = "INSERT INTO teacher (username) VALUES (:username)";
 
                 $stmt = $this->conn->prepare($query);
@@ -389,7 +391,7 @@
             return false;
         }
     }
-    Class Teacher_Assitant extends Employee_User{
+    Class Teacher_Assistant extends Employee_User{
         private $class_name;
         //Calls the construct function on Employee user
         public function __construct($db){
@@ -405,14 +407,14 @@
             $this->class_name = $class_name;
         }
         public function register(){
-            //Calls regsiter function on Employee User
-            if(parent::regsiter()){
+            //Calls register function on Employee User
+            if(parent::register()){
                 $query = "INSERT INTO teacher_assistant (username, class_name) VALUES (:username, :class_name)";
 
                 $stmt = $this->conn->prepare($query);
 
                 if($stmt->execute([
-                    "username" => $this->usernam,
+                    "username" => $this->username,
                     "class_name" => $this->class_name
                 ])){
                     return true;

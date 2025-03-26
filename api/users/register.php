@@ -19,7 +19,7 @@
     $db = $database->connect();
 
     //Taken from https://github.com/bradtraversy/php_rest_myblog.
-    //This code get's the data sent from an extrenal server.
+    //This code get's the data sent from an external server.
     //Description of each part.
     //json_decode()- decodes a json data and converts into php associative array.
     //file_get_contents() - used to read raw data from files or links.
@@ -46,7 +46,7 @@
                     elseif($data->employee_type == "TA"){
                         $user = new Teacher_Assitant($db);
                     }else{
-                        throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assitant)");
+                        throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)");
                     }
                 }
             }else{
@@ -83,7 +83,7 @@
                 //Change associative array to JSON.
                 echo json_encode(
                     array(
-                        "message" => "User created succefully"
+                        "message" => "User created successfully"
                     )
                 );
             }else{
