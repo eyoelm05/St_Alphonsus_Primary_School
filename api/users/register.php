@@ -33,7 +33,6 @@
     //My code
     //Sanitize data using htmlspecialchars()
     //Use setters to set values in user object
-
     try{
         $user->set_username(htmlspecialchars($data->username));
         $user->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
@@ -44,9 +43,11 @@
         $user->set_user_type(htmlspecialchars($data->user_type));
         $user->set_password(htmlspecialchars($data->password));
 
-            
+        //Checks if user exists  
         if($user->check_user()){
+            //Register User
             if($user->register()){
+                //Convert associative array to JSON.
                 echo json_encode(
                     array(
                         "message" => "User created succefully"
