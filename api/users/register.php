@@ -18,10 +18,6 @@
     $database = new Database();
     $db = $database->connect();
 
-    //My code
-    //Instantiate a new user object
-    $user = new User($db);
-
     //Taken from https://github.com/bradtraversy/php_rest_myblog.
     //This code get's the data sent from an extrenal server.
     //Description of each part.
@@ -31,9 +27,35 @@
     $data = json_decode(file_get_contents("php://input"));
     
     //My code
-    //Sanitize data using htmlspecialchars()
-    //Use setters to set values in user object
     try{
+        //Instantiate a new user object.
+        //Checks user_type and employee_type to instantiate the correct user object.
+        if(empty($data->user_type)){
+            throw new Exception ("User type can't be empty!");
+        } else{
+            if($data->user_type == "parent"){
+                $user = new Parent_User($db);
+            }
+            elseif($data->user_type == "employee"){
+                if(empty($data->employee_type)){
+                    throw new Exception ("For employee's employee type can't be empty");
+                }else{
+                    if($data->employee_type == "T"){
+                        $user = new Teacher($db);
+                    }
+                    elseif($data->employee_type == "TA"){
+                        $user = new Teacher_Assitant($db);
+                    }else{
+                        throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assitant)");
+                    }
+                }
+            }else{
+                throw new Exception ("User type can only take values parent or employee!!");
+            }
+        }
+
+        //Sanitize data using htmlspecialchars()
+        //Use setters to set values in user object
         $user->set_username(htmlspecialchars($data->username));
         $user->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
         $user->set_phone_no(htmlspecialchars($data->phone_no));
@@ -42,6 +64,17 @@
         $user->set_sex(htmlspecialchars($data->sex));
         $user->set_user_type(htmlspecialchars($data->user_type));
         $user->set_password(htmlspecialchars($data->password));
+
+        if($data->user_type == "employee"){
+            $user->set_background_check(htmlspecialchars($data->background_check));
+            $user->set_date_of_birth(htmlspecialchars($data->date_of_birth));
+            $user->set_start_date(htmlspecialchars($data->start_date));
+            $user->set_employee_type(htmlspecialchars($data->employee_type));
+        }
+
+        if($data->employee_type == "TA"){
+            $user->set_class_name(htmlspecialchars($data->class_name));
+        }
 
         //Checks if user exists  
         if($user->check_user()){
@@ -59,7 +92,7 @@
         }else{
             throw new Exception("User already exists!");
         }
-    } catch(Exception $e){
+    }catch(Exception $e){
         echo json_encode(
             array(
                 "message" => $e->getMessage()
