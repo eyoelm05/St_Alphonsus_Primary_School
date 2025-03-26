@@ -365,4 +365,63 @@
 
     }
 
+    Class Teacher extends Employee_User{
+        //Calls the construct function on Employee user
+        public function __construct($db){
+            parent::__construct($db);
+        }
+
+        public function register(){
+            //Calls regsiter function on Employee User
+            if(parent::regsiter()){
+                $query = "INSERT INTO teacher (username) VALUES (:username)";
+
+                $stmt = $this->conn->prepare($query);
+
+                if($stmt->execute([
+                    "username" => $this->username
+                ])){
+                    return true;
+                }
+                return false;
+            }
+
+            return false;
+        }
+    }
+    Class Teacher_Assitant extends Employee_User{
+        private $class_name;
+        //Calls the construct function on Employee user
+        public function __construct($db){
+            parent::__construct($db);
+        }
+
+        //Setter for class_name
+        public function set_class_name($class_name){
+            if(empty($class_name)){
+                throw new Exception ("Class name can't be empty");
+            }
+
+            $this->class_name = $class_name;
+        }
+        public function register(){
+            //Calls regsiter function on Employee User
+            if(parent::regsiter()){
+                $query = "INSERT INTO teacher_assistant (username, class_name) VALUES (:username, :class_name)";
+
+                $stmt = $this->conn->prepare($query);
+
+                if($stmt->execute([
+                    "username" => $this->usernam,
+                    "class_name" => $this->class_name
+                ])){
+                    return true;
+                }
+                return false;
+            }
+
+            return false;
+        }
+    }
+
 ?>
