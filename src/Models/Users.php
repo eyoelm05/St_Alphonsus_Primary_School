@@ -195,6 +195,7 @@
             //Prepare statement
             $stmt = $this->conn->prepare($query);
 
+            //Execute the statement by adding it's binding parameters
             if($stmt->execute([
                 "username" => $this->username,
                 "first_name" => $this->first_name,
