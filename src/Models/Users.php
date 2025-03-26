@@ -26,10 +26,11 @@
                 throw new Exception("Username can not be empty!");
             }
             //Use preg_match to make sure that username should have the same pattern as the regular expression. Trim is used to get rid of white space.
-            elseif (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', trim($username))) {
+            if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', trim($username))) {
                 throw new Exception("Invalid username! Must be 3-20 characters long and contain only letters, numbers, or underscores.");
             };
             //Assign Value
+            //Making this an else block is possible, but it's not necessary because the code won't reach this part if any of the if clauses become true.
             $this->username = $username;
         }
 
@@ -61,6 +62,21 @@
             $this->first_name = $first_name;
             $this->middle_initial = $middle_initial;
             $this->last_name = $last_name;
+        }
+
+        public function set_phone_no($phone_no){
+            //Trim white space
+            $phone_no = trim($phone_no);
+
+            //Check if phone_no exists
+            if(empty($phone_no)){
+                throw new Exception("Phone number can't be empty!");
+            }
+            //Check if phone_no is a valid UK number
+            if(!preg_match('/^07\d{9}$/',$phone_no)){
+                throw new Exception("Invalid phone number! Please Enter your phone number in 07xxx-xxxxxx");
+            }
+            $this->phone_no = $phone_no;
         }
         
         //Create User method
