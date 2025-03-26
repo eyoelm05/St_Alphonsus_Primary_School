@@ -44,7 +44,7 @@
                         $user = new Teacher($db);
                     }
                     elseif($data->employee_type == "TA"){
-                        $user = new Teacher_Assitant($db);
+                        $user = new Teacher_Assistant($db);
                     }else{
                         throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)");
                     }
