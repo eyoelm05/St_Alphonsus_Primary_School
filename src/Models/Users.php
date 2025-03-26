@@ -122,6 +122,20 @@
             }
         }
 
+        public function set_user_type($user_type){
+            //Trim white space
+            $user_type = trim($user_type);
+
+            if(empty($user_type)){
+                throw new Exception("User type can't be empty!");
+            }
+
+            if($user_type != "parent" && $user_type != "employee"){
+                throw new Exception("User can only be a parent or an employee");
+            }
+            $this->user_type = $user_type;
+        }
+        
         public function set_password($password){
             //Trim white space
             $password = trim($password);
