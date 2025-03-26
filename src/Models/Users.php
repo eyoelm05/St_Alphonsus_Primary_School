@@ -117,9 +117,11 @@
             }
 
             //Make sure sex is inputed correctly
-            if($sex == "M" || $sex == "F" || $sex == "O"){
+            if($sex !== "M" && $sex !== "F" && $sex !== "O"){
                 throw new Exception("Sex can't be anything other than male, female or other");
             }
+
+            $this->sex = $sex;
         }
 
         public function set_user_type($user_type){
