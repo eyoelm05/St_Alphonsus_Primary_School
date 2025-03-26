@@ -47,7 +47,7 @@
         if($user->check_user()){
             //Register User
             if($user->register()){
-                //Convert associative array to JSON.
+                //Change associative array to JSON.
                 echo json_encode(
                     array(
                         "message" => "User created succefully"

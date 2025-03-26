@@ -128,6 +128,7 @@
             //Trim white space
             $user_type = trim($user_type);
 
+            //Check if user type exists
             if(empty($user_type)){
                 throw new Exception("User type can't be empty!");
             }
@@ -275,5 +276,65 @@
                 
             }
         }
+    }
+
+    Class Employee_User extends User{
+        //Properties specfic to employee
+        protected $background_check;
+        protected $date_of_birth;
+        protected $employee_type;
+        protected $start_date;
+
+        //Connecting to do be using parent construct.
+        public function __construct($db){
+            parent::__construct($db);
+        }
+
+        //Setters for each value
+        public function set_background_check($background_check){
+            //Check if background check is a boolean.
+            if(!is_bool($background_check)){
+                throw new Exception ("Background check can only be true or false");
+            }
+
+            $this->background_check = $background_check;
+        }
+
+        public function set_date_of_birth($date_of_birth){
+
+            //Check if date of birht exists
+            if(empty($date_of_birth)){
+                throw new Exception ("Date of birth can't be empty!");
+            }
+
+            $this->date_of_birth = $date_of_birth;
+        }
+
+        public function set_start_date($start_date){
+            //Check if start date exists
+            if(empty($start_date)){
+                throw new Exception ("Date of birth can't be empty!");
+            }
+
+            $this->start_date = $start_date;
+        }
+
+        public function set_employee_type($employee_type){
+            //Trim white space
+            $employee_type = trim($employee_type);
+
+            //Check if employee type exists
+            if(empty($employee_type)){
+                throw new Exception ("Employee type can't be empty!");
+            }
+
+            //Make sure employee type is T or TA
+            if($employee_type !== "T" && $employee_type !== "TA"){
+                throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assitant)");
+            }
+
+            $this->employee_type = $employee_type;
+        }
+
     }
 ?>
