@@ -77,5 +77,15 @@
 
             $this->address = $address;
         }
+
+        public function set_date_of_birth($date_of_birth){
+
+            //Check if date of birth exists
+            if(empty($date_of_birth)){
+                throw new Exception ("Date of birth can't be empty!");
+            }
+
+            $this->date_of_birth = $date_of_birth;
+        }
     }
 ?>
