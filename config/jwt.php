@@ -38,8 +38,20 @@
             ));//Data stored in the token.
 
             //Encode data to a jwt token
-            $jwt = JWT::encode($token, $this->secret_key);
+            //array('HS256') this is the algorithm used to create the token
+            $jwt = JWT::encode($token, $this->secret_key, array('HS256'));
             return $jwt;
+        }
+
+        public function verify_token($jwt){
+            try{
+                //Decode JWT token
+                //array('HS256') this is the algorithm used to create the token
+                $decoded = JWT::decode($jwt, $this->secret_key, array('HS256'));
+                return $decoded;
+            }catch(Exception $e){
+                return null;
+            }
         }
     }
 ?>
