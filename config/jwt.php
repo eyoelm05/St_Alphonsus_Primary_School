@@ -8,8 +8,8 @@
 
     class JWT_TOKEN {
         private $secret_key;
-        private static $issuer = "St_Alphonsus_Primary_School";
-        private static $audience = "parent_and_employee_of_the_school";
+        private $issuer = "St_Alphonsus_Primary_School";
+        private $audience = "parent_and_employee_of_the_school";
 
         public function __construct(){
             //Code from: https://github.com/vlucas/phpdotenv
@@ -26,8 +26,8 @@
             //However, some portions have been omitted, because they are not necessary for this project.
             //Omissions will be indicated with a comment.
             $token = array(
-                "iss" => self::issuer,
-                "aud" => self::audience,
+                "iss" => $this->issuer,
+                "aud" => $this->audience,
                 "iat" => time(), //The time when the token is issued
                 //"nbf" => $notbefore_claim, Omitted because this project doesn't need a time gap to activate the token.
                 "exp" => time() + 2*60*60,//Token expires after 2hours(7,200 seconds)
@@ -38,8 +38,8 @@
             ));//Data stored in the token.
 
             //Encode data to a jwt token
-            //array('HS256') this is the algorithm used to create the token
-            $jwt = JWT::encode($token, $this->secret_key, array('HS256'));
+            //'HS256' this is the algorithm used to create the token
+            $jwt = JWT::encode($token, $this->secret_key, 'HS256');
             return $jwt;
         }
 

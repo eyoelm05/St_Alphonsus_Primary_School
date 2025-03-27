@@ -279,6 +279,7 @@
                     $row2 = $stmt2->fetch();
                     $row += $row2; //Concatenate the two results.
                 }
+                unset($row["password_hash"]);
                 return $row;
             }else{
                 throw new Exception ("Invalid Credentials!!");
