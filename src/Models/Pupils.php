@@ -48,5 +48,22 @@
             $this->middle_initial = $middle_initial;
             $this->last_name = $last_name;
         }
+
+        public function set_sex($sex){
+            //Trim white space
+            $sex = trim($sex);
+
+            //Check if sex exists
+            if(empty($sex)){
+                throw new Exception("Sex can't be empty!");
+            }
+
+            //Make sure sex is inputted correctly
+            if($sex !== "M" && $sex !== "F" && $sex !== "O"){
+                throw new Exception("Sex can't be anything other than male, female or other");
+            }
+
+            $this->sex = $sex;
+        }
     }
 ?>
