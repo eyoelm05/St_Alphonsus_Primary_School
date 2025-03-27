@@ -89,6 +89,10 @@
         }
 
         public function set_medicals($medicals){
+            //Check if medicals is array
+            if(!is_array($medicals)){
+                throw new Exception ("Medicals must be an array");
+            }
             $this->medicals-> $medicals;
         }
     }
