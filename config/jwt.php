@@ -1,6 +1,6 @@
 <?php
     //autoload.php: helps the system interpret library classes such as dotenv and jwt.
-    require "../vendor/autoload.php";
+    require_once __DIR__ . '/../vendor/autoload.php';
     //Import Dotenv class
     use Dotenv\Dotenv;
     //Import JWT class

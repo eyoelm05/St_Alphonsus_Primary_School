@@ -253,6 +253,37 @@
                 return true;
             }    
         }
+
+        public function login($username, $password){
+            //Query to get username, user type and password hash from DB.
+            $query = "SELECT username, user_type, password_hash FROM users WHERE username = :username";
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([
+                "username" => $username
+            ]);
+
+            //Store data from database in row.
+            $row = $stmt->fetch();
+
+            //Check if username exists and verify password
+            if($row && password_verify($password, $row["password_hash"])){
+                //If user type is employee make another query to retrieve employee type.
+                if($row['user_type'] == "employee"){
+                    $query2 = "SELECT employee_type FROM employee WHERE username = :username";
+                    $stmt2 = $this->conn->prepare($query2);
+                    $stmt2->execute([
+                        "username" => $row["username"]
+                    ]);
+
+                    $row2 = $stmt2->fetch();
+                    $row += $row2; //Concatenate the two results.
+                }
+                return $row;
+            }else{
+                throw new Exception ("Invalid Credentials!!");
+            }
+        }
     }
 
     class Parent_User extends User {
