@@ -65,5 +65,17 @@
 
             $this->sex = $sex;
         }
+
+        public function set_address($address){
+            //Trim white space
+            $address = trim($address);
+
+            //Check if address exists
+            if(empty($address)){
+                throw new Exception("Address can't be empty!");
+            }
+
+            $this->address = $address;
+        }
     }
 ?>
