@@ -87,5 +87,9 @@
 
             $this->date_of_birth = $date_of_birth;
         }
+
+        public function set_medicals($medicals){
+            $this->medicals-> $medicals;
+        }
     }
 ?>
