@@ -108,8 +108,8 @@
 
 
         public function set_medicals($medicals){
-            //Check if medicals is array
-            if(!is_array($medicals)){
+            //If medicals exists it has to be an array.
+            if(!empty($medicals) && !is_array($medicals)){
                 throw new Exception ("Medicals must be an array");
             }
             $this->medicals-> $medicals;
@@ -138,7 +138,20 @@
                 //Query to add pupil parent relationship.
                 $query_pupil_parent = "INSERT INTO pupil_parent (username, pupil_id, relationship)
                                         VALUES (:username, :pupil_id, :relationship)";
-
+                                        
+                //Handle Inserting medical info
+                if($this->medicals){
+                    foreach ($this->medicals as $medical_info) {
+                        $query_pupil_medicals = "INSERT INTO pupil_medicals (medical_info, pupil_id) VALUES (:medical_info, :pupil_id)";
+    
+                        $stmt2 = $this->conn->prepare($query_pupil_medicals);
+                        $stmt2->execute([
+                            "medical_info" => $medical_info,
+                            "pupil_id" => $pupil_id
+                        ]);
+                    }
+    
+                }
                 //Prepare Query
                 $stmt1 = $this->conn->prepare($query_pupil_parent);
 
@@ -148,9 +161,9 @@
                     "pupil_id" => $pupil_id,
                     "relationship" => $relationship
                 ])){
-                    return true;
+                    
                 } else {
-                    throw new Exception("Failed to add relationship between parent and pupil");
+                    return false;
                 }
 
             }else{
