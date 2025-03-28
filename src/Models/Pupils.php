@@ -79,7 +79,6 @@
         }
 
         public function set_date_of_birth($date_of_birth){
-
             //Check if date of birth exists
             if(empty($date_of_birth)){
                 throw new Exception ("Date of birth can't be empty!");
@@ -87,6 +86,26 @@
 
             $this->date_of_birth = $date_of_birth;
         }
+
+        public function set_class_name($class_name){
+            //Trim white space
+            $class_name = trim($class_name);
+
+            //Validate class_name
+            if($class_name != "Reception Year" && 
+            $class_name != "Year 1" && 
+            $class_name != "Year 2" &&
+            $class_name != "Year 3" &&
+            $class_name != "Year 4" &&
+            $class_name != "Year 5" &&
+            $class_name != "Year 6"
+            ){
+                throw new Exception ("Enter proper class please!");
+            }
+
+            $this->class_name = $class_name;
+        }
+
 
         public function set_medicals($medicals){
             //Check if medicals is array
