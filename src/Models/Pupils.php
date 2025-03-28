@@ -114,5 +114,49 @@
             }
             $this->medicals-> $medicals;
         }
+
+        
+        public function add_pupil($parent_username, $relationship){
+            $query_pupil = "INSERT INTO pupils (first_name, middle_initial, last_name, date_of_birth, address, sex, class_name)
+                            VALUES (:first_name, :middle_initial, :last_name, :date_of_birth, :address, :sex, :class_name);";
+            //Prepare statement
+            $stmt = $this->conn->prepare($query_pupil);
+
+            //Execute query
+            if($stmt->execute([
+                "first_name" => $this->first_name,
+                "middle_initial" => $this->middle_initial,
+                "last_name" => $this->last_name,
+                "date_of_birth" => $this->date_of_birth,
+                "address" => $this->address,
+                "sex" => $this->sex,
+                "class_name" => $this->class_name
+            ])){
+                //Retrieve the id of the new pupil.
+                $pupil_id = $stmt->lastInsertId();
+
+                //Query to add pupil parent relationship.
+                $query_pupil_parent = "INSERT INTO pupil_parent (username, pupil_id, relationship)
+                                        VALUES (:username, :pupil_id, :relationship)";
+
+                //Prepare Query
+                $stmt1 = $this->conn->prepare($query_pupil_parent);
+
+                //Execute Query
+                if($stmt1->execute([
+                    "username" => $parent_username,
+                    "pupil_id" => $pupil_id,
+                    "relationship" => $relationship
+                ])){
+                    return true;
+                } else {
+                    throw new Exception("Failed to add relationship between parent and pupil");
+                }
+
+            }else{
+                throw new Exception ("Failed to add pupil.");
+            }
+            
+        } 
     }
 ?>
