@@ -112,7 +112,7 @@
             if(!empty($medicals) && !is_array($medicals)){
                 throw new Exception ("Medicals must be an array");
             }
-            $this->medicals-> $medicals;
+            $this->medicals = $medicals;
         }
 
         
@@ -133,7 +133,7 @@
                 "class_name" => $this->class_name
             ])){
                 //Retrieve the id of the new pupil.
-                $pupil_id = $stmt->lastInsertId();
+                $pupil_id = $this->conn->lastInsertId();
 
                 //Query to add pupil parent relationship.
                 $query_pupil_parent = "INSERT INTO pupil_parent (username, pupil_id, relationship)
@@ -161,7 +161,7 @@
                     "pupil_id" => $pupil_id,
                     "relationship" => $relationship
                 ])){
-                    
+                    return true;
                 } else {
                     return false;
                 }

@@ -40,18 +40,33 @@
         $pupil->set_address(htmlspecialchars($data->address));
         $pupil->set_date_of_birth(htmlspecialchars($data->date_of_birth));
         $pupil->set_class_name(htmlspecialchars($data->class_name));
+
+        //Add medicals only if it exists
         if($data->medicals){
-            $pupil->set_medicals(htmlspecialchars($data->medicals));
+            $medicals = [];
+            foreach($data->medicals as $medical_info){
+                array_push($medicals, htmlspecialchars($medical_info));
+            }
+
+            $pupil->set_medicals($medicals);
         }
 
+        //Check if relationship exists
         if($data->relationship){
-            $pupil->add_pupil($user["username"], htmlspecialchars($data->relationship));
+            //Execute add_pupil
+            if($pupil->add_pupil($user->username, htmlspecialchars($data->relationship))){
+                echo json_encode(array(
+                    "message" => "Pupil added successfully"
+                ));
+            }else{
+                throw new Exception ("Server Error.");
+            }
         } else{
             throw new Exception ("Relationship can't be empty!!");
         }
     }catch(Exception $e){
         echo json_encode(array(
-            "message" => $e->get_message() 
+            "message" => $e->getMessage() 
         ));
     }
 ?>
