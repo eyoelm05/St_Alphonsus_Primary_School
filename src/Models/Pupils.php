@@ -237,22 +237,21 @@
             }
         }
 
-        public function read_teacher($username){
+        public function read_class($class_name){
             $query = "
                 SELECT
                 p.pupil_id as id,
                 concat(p.first_name, ' ', IFNULL(p.middle_initial, ''),' ', p.last_name) as name,
                 p.class_name as current_class
                 FROM pupils p
-                LEFT JOIN classes c ON c.class_name = p.class_name
-                WHERE c.teacher = :username
+                WHERE p.class_name = :class_name
             ";
             //Prepare statement
             $stmt = $this->conn->prepare($query);
 
             //Execute statement
             if($stmt->execute(array(
-                "username" => $username
+                "username" => $class_name
             ))){
                 //Fetch pupils
                 $pupils = $stmt->fetchAll();

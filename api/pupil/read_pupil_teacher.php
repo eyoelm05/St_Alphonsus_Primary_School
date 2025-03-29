@@ -24,8 +24,9 @@
         if(isset($_GET["id"])){
             $id = $_GET["id"];
             $data = $pupil->read_single($id);
-        }else{
-            $data = $pupil->read_teacher($user->username);
+        }elseif(isset($_GET["class_name"])){
+            $class_name = $_GET["class_name"];
+            $data = $pupil->read_class($class_name);
         }
 
         echo json_encode(array(
