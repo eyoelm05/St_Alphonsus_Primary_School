@@ -206,7 +206,7 @@
         public function register(){
             //Query used to insert a user
             $query = "INSERT INTO users (username, first_name, middle_initial, last_name, email, phone_no, address, sex, user_type, password_hash) 
-          VALUES (:username, :first_name, :middle_initial, :last_name, :email, :phone_no, :address, :sex, :user_type, :password_hash)";
+                    VALUES (:username, :first_name, :middle_initial, :last_name, :email, :phone_no, :address, :sex, :user_type, :password_hash)";
 
 
             //Prepare statement
@@ -284,6 +284,32 @@
             }else{
                 throw new Exception ("Invalid Credentials!!");
             }
+        }
+
+        //Update User method
+        public function update($username){
+            $query = "UPDATE users SET first_name = :first_name, middle_initial = :middle_initial, last_name = :last_name, 
+                    email = :email, phone_no = :phone_no, address = :address, sex = :sex WHERE username = :username";
+
+
+            //Prepare statement
+            $stmt = $this->conn->prepare($query);
+
+            //Execute the statement by adding it's binding parameters
+            if($stmt->execute([
+                "username" => $username,
+                "first_name" => $this->first_name,
+                "middle_initial" => $this->middle_initial,
+                "last_name" => $this->last_name ,
+                "email" => $this->email,
+                "phone_no" => $this->phone_no,
+                "address" => $this->address,
+                "sex" => $this->sex,
+            ])){
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -387,6 +413,30 @@
                     "background_check" => $this->background_check,
                     "date_of_birth" => $this->date_of_birth,
                     "employee_type" => $this->employee_type,
+                    "start_date" => $this->start_date
+                ])){
+                    return true;
+                }
+                return false;
+            }
+
+            return false;
+        }
+
+        public function update($username){
+            //First update user
+            if(parent::update($username)){
+                //Query to insert employee
+                $query = "UPDATE employee SET background_check = :background_check, date_of_birth = :date_of_birth, start_date = :start_date
+                        WHERE username = :username";
+
+                //Prepare query to be executed
+                $stmt = $this->conn->prepare($query);
+
+                //Execute query with it's binding params
+                if($stmt->execute([
+                    "background_check" => $this->background_check,
+                    "date_of_birth" => $this->date_of_birth,
                     "start_date" => $this->start_date
                 ])){
                     return true;
