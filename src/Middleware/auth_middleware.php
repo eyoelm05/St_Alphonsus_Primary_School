@@ -26,7 +26,7 @@
         try{
             //Verify token received 
             $decoded = $jwt_object->verify_token($jwt);
-            return $decoded;
+            return $decoded["data"];
         }catch (Exception $e){
             echo json_encode(array(
                 "message" => $e->get_message()
