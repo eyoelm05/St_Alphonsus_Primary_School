@@ -23,7 +23,12 @@
         //Get Id
         if(isset($_GET["id"])){
             $id = $_GET["id"];
-            $data = $pupil->read_single($id);
+            if($pupil->check_parent($user->username, $id)){
+                $data = $pupil->read_single($id);
+            }else{
+                throw new Exception ("Unauthorized!");
+            }
+            
         }else{
             $data = $pupil->read_parent($user->username);
         }

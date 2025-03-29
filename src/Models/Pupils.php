@@ -115,6 +115,26 @@
             $this->medicals = $medicals;
         }
 
+        public function check_parent($username, $id){
+            $parent = false;
+            $query = "SELECT pupil_id as id FROM pupil_parent WHERE username = :username";
+            
+            $stmt = $this->conn->prepare($query);
+            if($stmt->execute([
+                "username" => $username
+            ])){
+                $rows = $stmt->fetchAll();
+                foreach($rows as $row){
+                    if($row["id"] == $id){
+                        $parent = true;
+                    }
+                }
+            }else{
+                throw new Exception ("Server Error.");
+            }
+
+            return $parent;
+        }
         
         public function add_pupil($parent_username, $relationship){
             $query_pupil = "INSERT INTO pupils (first_name, middle_initial, last_name, date_of_birth, address, sex, class_name)
