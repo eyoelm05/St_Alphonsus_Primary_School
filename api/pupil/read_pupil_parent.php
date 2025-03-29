@@ -23,11 +23,15 @@
         //Get Id
         if(isset($_GET["id"])){
             $id = $_GET["id"];
-
-            $pupil->read_parent($user->username, $id);
+            $data = $pupil->read_single($id);
         }else{
-            $pupil->read_parent($user->username);
+            $data = $pupil->read_parent($user->username);
         }
+
+        echo json_encode(array(
+            "pupils" => $data
+        ));
+        
     }catch(Exception $e){
         echo json_encode(array(
             "message" => $e->getMessage() 

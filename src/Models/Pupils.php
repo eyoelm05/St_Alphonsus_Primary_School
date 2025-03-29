@@ -173,7 +173,7 @@
         }
 
         public function read_single($id){
-            //Query to retrieve student with parents and teachers
+            //Query to retrieve pupil information with parents and teachers
             $query = "
                 SELECT 
                 p.pupil_id as id,
@@ -199,6 +199,7 @@
             //Prepare statement
             $stmt = $this->conn->prepare($query);
 
+            //Execute statement
             if($stmt->execute(array(
                 "id" => $id
             ))){
@@ -208,5 +209,32 @@
                 throw new Exception ("Server Error.");
             }
         } 
+
+        public function read_parent($username){
+            //Query to get pupils of the requesting parent
+            $query = "
+            SELECT
+                p.pupil_id as id,
+                concat(p.first_name, ' ', IFNULL(p.middle_initial, ''),' ', p.last_name) as name,
+                p.class_name as current_class,
+                p.date_of_birth
+                FROM pupils p
+                LEFT JOIN pupil_parent pp ON p.pupil_id = pp.pupil_id
+                WHERE pp.username = :username
+            ";
+            //Prepare statement
+            $stmt = $this->conn->prepare($query);
+
+            //Execute statement
+            if($stmt->execute(array(
+                "username" => $username
+            ))){
+                //Fetch pupils
+                $pupils = $stmt->fetchAll();
+                return $pupils;
+            }else{
+                throw new Exception ("Server Error.");
+            }
+        }
     }
 ?>
