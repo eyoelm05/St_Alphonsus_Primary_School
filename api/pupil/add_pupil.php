@@ -20,7 +20,7 @@
     require_once __DIR__."/../../src/Middleware/auth_middleware.php";
 
     //Protect route
-    $users = authorize_parent();
+    $user = authorize_parent();
 
     //Instantiate database and connect it. 
     //Taken from https://github.com/bradtraversy/php_rest_myblog.
@@ -42,6 +42,12 @@
         $pupil->set_class_name(htmlspecialchars($data->class_name));
         if($data->medicals){
             $pupil->set_medicals(htmlspecialchars($data->medicals));
+        }
+
+        if($data->relationship){
+            $pupil->add_pupil($user["username"], htmlspecialchars($data->relationship));
+        } else{
+            throw new Exception ("Relationship can't be empty!!");
         }
     }catch(Exception $e){
         echo json_encode(array(
