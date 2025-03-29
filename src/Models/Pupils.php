@@ -170,7 +170,43 @@
                 throw new Exception ("Failed to add pupil.");
             }
             
+        }
+
+        public function read_single($id){
+            //Query to retrieve student with parents and teachers
+            $query = "
+                SELECT 
+                p.pupil_id as id,
+                c.class_name as class,
+                concat(p.first_name, ' ', IFNULL(p.middle_initial, ''),' ', p.last_name) as name,
+                p.address,
+                p.date_of_birth,
+                p.sex,
+                concat(pt.first_name, ' ',IFNULL(pt.middle_initial, ''),' ', pt.last_name) as teacher_name,
+                GROUP_CONCAT(DISTINCT concat(ppu.first_name,' ',IFNULL(ppu.middle_initial, ''), ' ' , ppu.last_name, ' ', pp.relationship) SEPARATOR '\n') as parents,
+                IFNULL(GROUP_CONCAT(DISTINCT pta.username SEPARATOR ', '), '') as teacher_assistants,
+                IFNULL(GROUP_CONCAT(DISTINCT pm.medical_info SEPARATOR ', '), '') as medicals
+                FROM pupils p
+                LEFT JOIN pupil_parent pp ON p.pupil_id = pp.pupil_id
+                LEFT JOIN classes c ON p.class_name = c.class_name
+                LEFT JOIN teacher ON c.teacher = teacher.username
+                LEFT JOIN users pt ON teacher.username = pt.username
+                LEFT JOIN users ppu ON pp.username = ppu.username
+                LEFT JOIN teacher_assistant pta ON p.class_name = pta.class_name
+                LEFT JOIN pupil_medicals pm ON p.pupil_id = pm.pupil_id
+                WHERE p.pupil_id = :id
+            ";
+            //Prepare statement
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute(array(
+                "id" => $id
+            ))){
+                $pupil = $stmt->fetch();
+                return $pupil;
+            }else{
+                throw new Exception ("Server Error.");
+            }
         } 
-        
     }
 ?>
