@@ -311,6 +311,19 @@
 
             return false;
         }
+
+        public function delete($username){
+            $query = "DELETE FROM users WHERE username = :username";
+
+            $stmt = $this->conn->prepare($query);
+            if($stmt->execute([
+                "username" => $username
+            ])){
+                return true;
+            }
+
+            return false;
+        }
     }
 
     class Parent_User extends User {
