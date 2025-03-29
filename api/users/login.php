@@ -59,7 +59,7 @@
         }else{
             $token = $jwt_object->issue_token($login_data["username"], $login_data["user_type"]);
         }
-        setcookie("auth", $token,time() + 2*60*60, "/", true, true);
+        setcookie("auth", $token,time() + 2*60*60, "/", "",true, true);
         echo json_encode(
             array(
                 "message" => "User logged in."

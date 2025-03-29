@@ -3,8 +3,9 @@
     require_once __DIR__ . '/../vendor/autoload.php';
     //Import Dotenv class
     use Dotenv\Dotenv;
-    //Import JWT class
+    //Import JWT class and key taken from: https://github.com/firebase/php-jwt 
     use \Firebase\JWT\JWT;
+    use Firebase\JWT\Key;
 
     class JWT_TOKEN {
         private $secret_key;
@@ -46,11 +47,12 @@
         public function verify_token($jwt){
             try{
                 //Decode JWT token
-                //array('HS256') this is the algorithm used to create the token
-                $decoded = JWT::decode($jwt, $this->secret_key, array('HS256'));
-                return $decoded;
+                //'HS256' this is the algorithm used to create the token
+                //This code is taken from: https://github.com/firebase/php-jwt
+                $decoded = JWT::decode($jwt, new Key($this->secret_key, 'HS256'));
+                return (array)$decoded;
             }catch(Exception $e){
-                return null;
+                throw new Exception ("Invalid token!");
             }
         }
     }

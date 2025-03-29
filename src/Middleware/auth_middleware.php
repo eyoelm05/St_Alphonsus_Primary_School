@@ -4,8 +4,10 @@
     require __DIR__.'/../../config/jwt.php';
     
 
-    $jwt_object = new JWT_TOKEN();
     function authenticate() {
+        //Create jwt object
+        $jwt_object = new JWT_TOKEN();
+
         //Get cookie from server
         if (isset($_COOKIE["auth"])) {
             $jwt = $_COOKIE["auth"];
@@ -24,6 +26,7 @@
         try{
             //Verify token received 
             $decoded = $jwt_object->verify_token($jwt);
+            return $decoded;
         }catch (Exception $e){
             echo json_encode(array(
                 "message" => $e->get_message()
