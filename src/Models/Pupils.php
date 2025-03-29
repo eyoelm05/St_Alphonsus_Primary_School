@@ -251,7 +251,7 @@
 
             //Execute statement
             if($stmt->execute(array(
-                "username" => $class_name
+                "class_name" => $class_name
             ))){
                 //Fetch pupils
                 $pupils = $stmt->fetchAll();
