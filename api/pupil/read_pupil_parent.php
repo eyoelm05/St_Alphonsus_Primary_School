@@ -21,12 +21,13 @@
 
     try{
         //Get Id
-        if(!isset($_GET["id"])){
-            throw new Exception ("Wrong route!");
-        }
-        $id = $_GET["id"];
+        if(isset($_GET["id"])){
+            $id = $_GET["id"];
 
-        $pupil->read_parent($id, $user->username);
+            $pupil->read_parent($user->username, $id);
+        }else{
+            $pupil->read_parent($user->username);
+        }
     }catch(Exception $e){
         echo json_encode(array(
             "message" => $e->getMessage() 
