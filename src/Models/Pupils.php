@@ -1,5 +1,5 @@
 <?php
-    class Pupils{
+    class Pupil{
         //Create connection property
         private $conn;
 
