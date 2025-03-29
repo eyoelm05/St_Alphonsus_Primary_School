@@ -5,8 +5,8 @@
         //Call authenticate function
         $users = authenticate();
 
-        //Check if user type is parent
-        if($users["user_type"] != "parent"){
+        //Check if user type is parent $users->user_type because by default decoding a jwt token gives you an object
+        if($users->user_type != "parent"){
             echo json_encode(["message" => "Access Denied: Admins Only"]);
             exit();
         }
@@ -19,7 +19,7 @@
         $users = authenticate();
 
         //Check if user type is employee
-        if($users["user_type"] != "employee"){
+        if($users->user_type != "employee"){
             echo json_encode(["message" => "Access Denied: Admins Only"]);
             exit();
         }
