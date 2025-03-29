@@ -27,6 +27,8 @@
         }elseif(isset($_GET["class_name"])){
             $class_name = $_GET["class_name"];
             $data = $pupil->read_class($class_name);
+        }else{
+            throw new Exception("You must enter a class or an id");
         }
 
         echo json_encode(array(
