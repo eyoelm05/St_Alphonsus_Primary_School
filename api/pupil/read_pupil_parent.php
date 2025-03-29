@@ -23,6 +23,7 @@
         //Get Id
         if(isset($_GET["id"])){
             $id = $_GET["id"];
+            //Check if parent is related to the pupil they are trying to access
             if($pupil->check_parent($user->username, $id)){
                 $data = $pupil->read_single($id);
             }else{

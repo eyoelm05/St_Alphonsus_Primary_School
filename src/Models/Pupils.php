@@ -135,7 +135,7 @@
 
             return $parent;
         }
-        
+
         public function add_pupil($parent_username, $relationship){
             $query_pupil = "INSERT INTO pupils (first_name, middle_initial, last_name, date_of_birth, address, sex, class_name)
                             VALUES (:first_name, :middle_initial, :last_name, :date_of_birth, :address, :sex, :class_name);";
@@ -279,6 +279,49 @@
             }else{
                 throw new Exception ("Server Error.");
             }
+        }
+
+        public function update($id){
+            $query = "UPDATE pupils SET first_name = :first_name, middle_initial = :middle_initial, last_name = :last_name, 
+                        date_of_birth = :date_of_birth, address = :address, sex = :sex, class_name = :class_name
+                        WHERE pupil_id = :id";
+
+            //Prepare statement
+            $stmt = $this->conn->prepare($query);
+
+            //Execute query
+            if($stmt->execute([
+                "first_name" => $this->first_name,
+                "middle_initial" => $this->middle_initial,
+                "last_name" => $this->last_name,
+                "date_of_birth" => $this->date_of_birth,
+                "address" => $this->address,
+                "sex" => $this->sex,
+                "class_name" => $this->class_name,
+                "id" => $id
+            ])){
+                //Delete all medical queries first
+                $query_dm = "DELETE FROM pupil_medicals WHERE pupil_id = :id";
+                $stmt_dm = $this->conn->prepare($query_dm);
+                $stmt_dm->execute(["id" => $id]);
+                
+                //Handle Inserting medical info
+                if($this->medicals){
+                        foreach ($this->medicals as $medical_info) {
+                            $query_pupil_medicals = "INSERT INTO pupil_medicals (medical_info, pupil_id) VALUES (:medical_info, :pupil_id)";
+    
+                            $stmt2 = $this->conn->prepare($query_pupil_medicals);
+                            $stmt2->execute([
+                                "medical_info" => $medical_info,
+                                "pupil_id" => $id
+                            ]);
+                        }
+                        return true;
+                }else{
+                    return true;
+                }
+            }
+            
         }
     }
 ?>
