@@ -7,7 +7,7 @@
 
         //Check if user type is parent $users->user_type because by default decoding a jwt token gives you an object
         if($users->user_type != "parent"){
-            echo json_encode(["message" => "Access Denied: Admins Only"]);
+            echo json_encode(["message" => "Access Denied: Parents"]);
             exit();
         }
 
@@ -20,7 +20,7 @@
 
         //Check if user type is employee
         if($users->user_type != "employee"){
-            echo json_encode(["message" => "Access Denied: Admins Only"]);
+            echo json_encode(["message" => "Access Denied: Employee's only"]);
             exit();
         }
 
