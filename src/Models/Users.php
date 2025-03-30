@@ -1,9 +1,11 @@
 <?php
+    // The code in this file is entirely custom made by me.
+
     class User {
-        //Variable for db connection
+        // Variable for db connection
         protected $conn;
 
-        //Properties of user
+        // Properties of user
         protected $username;
         protected $first_name;
         protected $middle_initial;
@@ -15,141 +17,135 @@
         protected $user_type;
         protected $password_hash;
 
+        // Connects with database when the object is instantiated.
         public function __construct($db){
             $this -> conn = $db;
         }
 
-        //Setter functions for each value
+        // Setter functions for each value
         public function set_username($username){
-            //Make sure username exists
+            // Trim whitespace
+            $username = trim($username);
+
+            // Check if username exists
             if(empty($username)){
-                throw new Exception("Username can't be empty!");
+                // Sends error message and code.
+                throw new Exception("Username can't be empty!", 400);
             }
-            //Use preg_match to make sure that username should have the same pattern as the regular expression. Trim is used to get rid of white space.
-            if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', trim($username))) {
-                throw new Exception("Invalid username! Must be 3-20 characters long and contain only letters, numbers, or underscores.");
+
+            // Use preg_match to make sure that username should have the same pattern as the regular expression.
+            if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
+                throw new Exception("Invalid username! Must be 3-20 characters long and contain only letters, numbers, or underscores.", 400);
             };
-            //Assign Value
-            //Making this an else block is possible, but it's not necessary because the code won't reach this part if any of the if clauses become true.
+
+            // Assign value to property
             $this->username = $username;
         }
 
         public function set_name($first_name, $middle_initial, $last_name) {
-            // Trim whitespace
             $first_name = trim($first_name);
             $middle_initial = trim($middle_initial);
             $last_name = trim($last_name);
         
             // Check if first and last name are empty
             if (empty($first_name)) {
-                throw new Exception("First name can't be empty!");
+                throw new Exception("First name can't be empty!", 400);
             }
             if (empty($last_name)) {
-                throw new Exception("Last name can't be empty!");
+                throw new Exception("Last name can't be empty!", 400);
             }
         
             // Ensure names contain only letters
             if (!ctype_alpha($first_name) || !ctype_alpha($last_name)) {
-                throw new Exception("Names must contain only alphabetic characters.");
+                throw new Exception("Names must contain only alphabetic characters.", 400);
             }
         
-            // Middle initial is optional, but if provided, must be a single alphabetic character
+            // Middle initial is optional, but if provided, must be a single alphabetic character.
             if (!empty($middle_initial) && (!ctype_alpha($middle_initial) || strlen($middle_initial) > 1)) {
-                throw new Exception("Middle initial must be a single letter.");
+                throw new Exception("Middle initial must be a single letter.", 400);
             }
         
-            // Assign values
             $this->first_name = $first_name;
             $this->middle_initial = $middle_initial;
             $this->last_name = $last_name;
         }
 
         public function set_phone_no($phone_no){
-            //Trim white space
             $phone_no = trim($phone_no);
 
-            //Check if phone_no exists
+            // Check if phone_no exists
             if(empty($phone_no)){
-                throw new Exception("Phone number can't be empty!");
+                throw new Exception("Phone number can't be empty!", 400);
             }
-            //Check if phone_no is a valid UK number
+
+            // Check if phone_no is a valid UK number using regular expression.
             if(!preg_match('/^07\d{9}$/',$phone_no)){
-                throw new Exception("Invalid phone number! Please Enter your phone number in 07xxx-xxxxxx");
+                throw new Exception("Invalid phone number! Please Enter your phone number in 07xxx-xxxxxx", 400);
             }
+
             $this->phone_no = $phone_no;
         }
 
         public function set_email($email){
-            //Trim white space
             $email = trim($email);
 
-            //Check if email exists
+            // Check if email exists
             if(empty($email)){
-                throw new Exception("Email can't be empty!");
+                throw new Exception("Email can't be empty!", 400);
             }
-            //Check if email is valid
+
+            // Check if email is valid using regular expression
             if(!preg_match('/^[a-zA-Z0-9_]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,}$/',$email)){
-                throw new Exception("Invalid Email! Please enter a proper email such as: josh123@example.com.");
+                throw new Exception("Invalid Email! Please enter a proper email such as: josh123@example.com.", 400);
             }
 
             $this->email = $email;
         }
 
         public function set_address($address){
-            //Trim white space
             $address = trim($address);
 
-            //Check if address exists
+            // Check if address exists
             if(empty($address)){
-                throw new Exception("Address can't be empty!");
+                throw new Exception("Address can't be empty!", 400);
             }
 
             $this->address = $address;
         }
 
         public function set_sex($sex){
-            //Trim white space
             $sex = trim($sex);
 
-            //Check if sex exists
+            // Check if sex exists
             if(empty($sex)){
-                throw new Exception("Sex can't be empty!");
+                throw new Exception("Sex can't be empty!", 400);
             }
 
-            //Make sure sex is inputted correctly
+            // Make sure sex is inputted correctly
             if($sex !== "M" && $sex !== "F" && $sex !== "O"){
-                throw new Exception("Sex can't be anything other than male, female or other");
+                throw new Exception("Sex can't be anything other than male, female or other", 400);
             }
 
             $this->sex = $sex;
         }
 
         public function set_user_type($user_type){
-            //Trim white space
-            $user_type = trim($user_type);
-
-            //Check if user type exists
-            if(empty($user_type)){
-                throw new Exception("User type can't be empty!");
-            }
-
-            if($user_type != "parent" && $user_type != "employee"){
-                throw new Exception("User can only be a parent or an employee");
-            }
-            $this->user_type = $user_type;
+            // Validation is not required here.
+            // It has already been performed in the register endpoint.
+            $this->user_type = trim($user_type);
         }
         
+        // This code is a modified version of the password verification we learned in class.
         public function set_password($password){
-            //Trim white space
             $password = trim($password);
 
-            //Check if password has 8 characters
+            // Check if password has 8 characters
             if(strlen($password) < 8){
-                throw new Exception("Password must have at least 8 characters!");
+                throw new Exception("Password must have at least 8 characters!", 400);
             }
 
-            //Array to check that the password contains upper case, lower case, digits and special characters
-            //Why array: to be able to loop through them and handle exceptions easily
+            // Array to check that the password contains upper case, lower case, digits and special characters
+            // Why array?: to be able to loop through them and handle exceptions easily.
             $check_arr = array(
                 "upper" => false,
                 "lower" => false,
@@ -158,8 +154,7 @@
             ); 
 
 
-            //Loop over each character in the password and check if the character type.
-            //This code is a slightly modified version of the password verification we learned in class.
+            // Loop over each character in the password and check the character type.
             for($i=0; $i< strlen($password);$i++){
                 $chr = $password[$i];
 
@@ -177,10 +172,10 @@
                 }
             }
 
-            //Create the Error string
+            // Create the Error string
             $err_str = "Your password must contain: ";
 
-            //Loop over the check_arr and add value's that don't exist to the Error string in a readable format.
+            // Loop over the check_arr and add value's that don't exist to the error string in a readable format.
             foreach($check_arr as $key => $value){
                 if($value){
                     continue;
@@ -194,25 +189,26 @@
                 }
             }
 
-            //Hash the password if the password has everything required. Else send the error string as an exception.
+            // Hash the password if the password has everything required. 
+            // Else send the error string as an exception.
             if($check_arr["upper"] && $check_arr["lower"] && $check_arr["digit"] && $check_arr["special"]){
                 $this->password_hash = password_hash($password, PASSWORD_DEFAULT);
             }else{
-                throw new Exception($err_str);
+                throw new Exception($err_str, 400);
             }
         }
 
-        //Create User method
+        // Register method
         public function register(){
-            //Query used to insert a user
+            // Query used to insert a user
             $query = "INSERT INTO users (username, first_name, middle_initial, last_name, email, phone_no, address, sex, user_type, password_hash) 
                     VALUES (:username, :first_name, :middle_initial, :last_name, :email, :phone_no, :address, :sex, :user_type, :password_hash)";
 
 
-            //Prepare statement
+            // Prepare statement: Used to prepare sql query without the data.
             $stmt = $this->conn->prepare($query);
 
-            //Execute the statement by adding it's binding parameters
+            // Execute the statement by adding it's binding parameters.
             if($stmt->execute([
                 "username" => $this->username,
                 "first_name" => $this->first_name,
@@ -231,22 +227,20 @@
             return false;
         }
 
-        //Check if user exists
+        // Method to check if user exists
         public function check_user(){
-            //Query to count if there is a user with a specific username
             $query = 'SELECT COUNT(*) AS no_user FROM users WHERE username = :username';
 
-            //Prepare statement: Used to prepare sql query without the data.
             $stmt = $this->conn->prepare($query);
+            $stmt->execute(["username" => $this->username]);
 
-            //Execute the query with the data securely 
-            $stmt->execute(array("username" => $this->username));
+            // Fetch the first row
             $row = $stmt->fetch();
 
-            //Cast to integer to make sure
+            // Cast row returned form the query to integer
             settype($row["no_user"], "integer");
 
-            //If clause to check if a user exists
+            // Checks if there is user
             if($row['no_user'] !== 0){
                 return false;
             } else {
@@ -254,8 +248,8 @@
             }    
         }
 
+        // Login method
         public function login($username, $password){
-            //Query to get username, user type and password hash from DB.
             $query = "SELECT username, user_type, password_hash FROM users WHERE username = :username";
 
             $stmt = $this->conn->prepare($query);
@@ -263,12 +257,12 @@
                 "username" => $username
             ]);
 
-            //Store data from database in row.
             $row = $stmt->fetch();
 
-            //Check if username exists and verify password
+            // Check if username exists and verify password
             if($row && password_verify($password, $row["password_hash"])){
-                //If user type is employee make another query to retrieve employee type.
+
+                // If user type is employee make another query to retrieve employee type.
                 if($row['user_type'] == "employee"){
                     $query2 = "SELECT employee_type FROM employee WHERE username = :username";
                     $stmt2 = $this->conn->prepare($query2);
@@ -277,25 +271,25 @@
                     ]);
 
                     $row2 = $stmt2->fetch();
-                    $row += $row2; //Concatenate the two results.
+                    $row += $row2; // Concatenate the two results.
                 }
+                
+                // Take out password hash from the array.
                 unset($row["password_hash"]);
+
                 return $row;
             }else{
-                throw new Exception ("Invalid Credentials!!");
+                throw new Exception ("Invalid Credentials!", 400);
             }
         }
 
-        //Update User method
+        // Update method
         public function update($username){
             $query = "UPDATE users SET first_name = :first_name, middle_initial = :middle_initial, last_name = :last_name, 
                     email = :email, phone_no = :phone_no, address = :address, sex = :sex WHERE username = :username";
 
-
-            //Prepare statement
             $stmt = $this->conn->prepare($query);
 
-            //Execute the statement by adding it's binding parameters
             if($stmt->execute([
                 "username" => $username,
                 "first_name" => $this->first_name,
@@ -312,6 +306,7 @@
             return false;
         }
 
+        // Delete method
         public function delete($username){
             $query = "DELETE FROM users WHERE username = :username";
 
@@ -327,13 +322,13 @@
     }
 
     class Parent_User extends User {
-        //Connect to db using the parent class
+        // Connect to db using the parent class
         public function __construct($db){
             parent::__construct($db);
         }
 
         public function register(){
-            //First register user
+            // First register user
             if(parent::register()){
                 $query = "INSERT INTO parents(username) VALUES (:username)";
                 $stmt = $this->conn->prepare($query);
@@ -351,24 +346,25 @@
     }
 
     Class Employee_User extends User{
-        //Properties specific to employee
+
+        // Properties specific to employee
         protected $background_check;
         protected $date_of_birth;
         protected $employee_type;
         protected $start_date;
 
-        //Connecting to do be using parent construct.
         public function __construct($db){
             parent::__construct($db);
         }
 
-        //Setters for each value
+        // Setters for each value
         public function set_background_check($background_check){
-            //Fix conversion problem caused by json decode.
+            // Cast background check to boolean
             settype($background_check, "boolean");
-            //Check if background check is a boolean.
+
+            // Check if background check is a boolean.
             if(!is_bool($background_check)){
-                throw new Exception ("Background check can only be true or false");
+                throw new Exception ("Background check can only be true or false", 400);
             }
 
             $this->background_check = $background_check;
@@ -376,51 +372,50 @@
 
         public function set_date_of_birth($date_of_birth){
 
-            //Check if date of birth exists
+            // Check if date of birth exists
             if(empty($date_of_birth)){
-                throw new Exception ("Date of birth can't be empty!");
+                throw new Exception ("Date of birth can't be empty!", 400);
             }
 
             $this->date_of_birth = $date_of_birth;
         }
 
         public function set_start_date($start_date){
-            //Check if start date exists
+
+            // Check if start date exists
             if(empty($start_date)){
-                throw new Exception ("Start date can't be empty!");
+                throw new Exception ("Start date can't be empty!", 400);
             }
 
             $this->start_date = $start_date;
         }
 
         public function set_employee_type($employee_type){
-            //Trim white space
             $employee_type = trim($employee_type);
 
-            //Check if employee type exists
+            // Check if employee type exists
             if(empty($employee_type)){
-                throw new Exception ("Employee type can't be empty!");
+                throw new Exception ("Employee type can't be empty!", 400);
             }
 
-            //Make sure employee type is T or TA
+            // Make sure employee type is T or TA
             if($employee_type !== "T" && $employee_type !== "TA"){
-                throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)");
+                throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)", 400);
             }
 
             $this->employee_type = $employee_type;
         }
 
+        // Register method
         public function register(){
-            //First register user
+
+            // First register user
             if(parent::register()){
-                //Query to insert employee
                 $query = "INSERT INTO employee (username, background_check, date_of_birth, employee_type, start_date)
                              VALUES (:username, :background_check, :date_of_birth, :employee_type, :start_date)";
 
-                //Prepare query to be executed
                 $stmt = $this->conn->prepare($query);
 
-                //Execute query with it's binding params
                 if($stmt->execute([
                     "username" => $this->username,
                     "background_check" => $this->background_check,
@@ -436,17 +431,15 @@
             return false;
         }
 
+        // Update method
         public function update($username){
-            //First update user
+            // First update user
             if(parent::update($username)){
-                //Query to insert employee
                 $query = "UPDATE employee SET background_check = :background_check, date_of_birth = :date_of_birth, start_date = :start_date
                         WHERE username = :username";
 
-                //Prepare query to be executed
                 $stmt = $this->conn->prepare($query);
 
-                //Execute query with it's binding params
                 if($stmt->execute([
                     "background_check" => $this->background_check,
                     "date_of_birth" => $this->date_of_birth,
@@ -463,13 +456,14 @@
     }
 
     Class Teacher extends Employee_User{
-        //Calls the construct function on Employee user
+        // Calls the construct function on Employee user
         public function __construct($db){
             parent::__construct($db);
         }
 
+        // Register method
         public function register(){
-            //Calls register function on Employee User
+            // Calls register function on Employee User
             if(parent::register()){
                 $query = "INSERT INTO teacher (username) VALUES (:username)";
 
@@ -488,21 +482,24 @@
     }
     Class Teacher_Assistant extends Employee_User{
         private $class_name;
-        //Calls the construct function on Employee user
+
         public function __construct($db){
             parent::__construct($db);
         }
 
-        //Setter for class_name
+        // Setter for class_name
         public function set_class_name($class_name){
             if(empty($class_name)){
-                throw new Exception ("Class name can't be empty");
+                throw new Exception ("Class name can't be empty", 400);
             }
 
             $this->class_name = $class_name;
         }
+
+        // Register method
         public function register(){
-            //Calls register function on Employee User
+
+            // Calls register function on Employee User
             if(parent::register()){
                 $query = "INSERT INTO teacher_assistant (username, class_name) VALUES (:username, :class_name)";
 
