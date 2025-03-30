@@ -1,98 +1,127 @@
 <?php
-    // Headers: Taken from https://github.com/bradtraversy/php_rest_myblog
-    // Allows this API to be accessed from any domain.
-    header('Access-Control-Allow-Origin: *');
-    // Sets the content type to JSON, meaning this API sends and receives JSON data.
-    header('Content-Type: application/json');
-    // Specifies the request methods that this API can receive. In this case, the API can only be accessed if the request is made with a POST method.
-    header('Access-Control-Allow-Methods: POST');
-    // Specifies the headers that are allowed in the request. This enables the API to accept headers like Content-Type, Access-Control-Allow-Methods, Authorization, and X-Requested-With.
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    // Portions of this code are adapted from:
+    // Traversy, B. (2019) 'PHP REST API - MyBlog', GitHub. Available at: 
+    // https://github.com/bradtraversy/php_rest_myblog.
 
-    //Import required files.
+
+    // Headers: adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
+    // Allows this API endpoint to be accessed from any domain.
+    header('Access-Control-Allow-Origin: *');
+
+    // Specifies that this API endpoint will send responses in JSON format.  
+    // Notifies the front-end that the API's response data type is JSON. 
+    header('Content-Type: application/json');
+
+    // Specifies the request methods that this API can receive. 
+    //In this case, this API endpoint can only be accessed if the request is made using the POST method.
+    header('Access-Control-Allow-Methods: POST');
+
+    // Specifies the headers that are allowed in the request.
+    // This enables the API to accept headers like Content-Type, Access-Control-Allow-Methods, Authorization, and X-Requested-With.
+    // X-requested-with allows this api to identify AJAX requests.
+    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    // End of external code reference.
+
+
+
+    // My custom code
+    // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Users.php";
+    //End of my custom code.
 
-    //Instantiate database and connect it. 
-    //Taken from https://github.com/bradtraversy/php_rest_myblog.
+
+    // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
+    // Instantiate database and connect it.
     $database = new Database();
     $db = $database->connect();
 
-    //Taken from https://github.com/bradtraversy/php_rest_myblog.
-    //This code get's the data sent from an external server.
-    //Description of each part.
-    //json_decode()- decodes a json data and converts into php associative array.
-    //file_get_contents() - used to read raw data from files or links.
-    //php://input - is a read only stream that is used to access raw post data.
+    // This code get's the data sent from an external server.
+    // Description of each part.
+    // json_decode()- decodes a json data and converts into php associative array.
+    // file_get_contents() - used to read raw data from files or links.
+    // php://input - is a read only stream that is used to access raw post data.
     $data = json_decode(file_get_contents("php://input"));
-    
-    //My code
+    // End of external code reference.
+
+    // My custom code
     try{
-        //Instantiate a new user object.
-        //Checks user_type and employee_type to instantiate the correct user object.
+
+        // Checks user_type and employee_type to instantiate the correct user object.
         if(empty($data->user_type)){
-            throw new Exception ("User type can't be empty!");
+            // Sends error message and code.  
+            throw new Exception ("User type can't be empty!", 400);
         } else{
             if($data->user_type == "parent"){
+                // Create parent user object.
                 $user = new Parent_User($db);
             }
             elseif($data->user_type == "employee"){
                 if(empty($data->employee_type)){
-                    throw new Exception ("For employee's employee type can't be empty");
+                    throw new Exception ("For employee's employee type can't be empty!", 400);
                 }else{
                     if($data->employee_type == "T"){
+                        // Create teacher object.
                         $user = new Teacher($db);
                     }
                     elseif($data->employee_type == "TA"){
+                        // Create teacher assistant object.
                         $user = new Teacher_Assistant($db);
                     }else{
-                        throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)");
+                        throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant),", 400);
                     }
                 }
             }else{
-                throw new Exception ("User type can only take values parent or employee!!");
+                throw new Exception ("User type can only take values parent or employee!", 400);
             }
         }
 
-        //Sanitize data using htmlspecialchars()
-        //Use setters to set values in user object
-        $user->set_username(htmlspecialchars($data->username));
-        $user->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
-        $user->set_phone_no(htmlspecialchars($data->phone_no));
-        $user->set_email(htmlspecialchars($data->email));
-        $user->set_address(htmlspecialchars($data->address));
-        $user->set_sex(htmlspecialchars($data->sex));
-        $user->set_user_type(htmlspecialchars($data->user_type));
-        $user->set_password(htmlspecialchars($data->password));
+        // Sanitize data using htmlspecialchars()
+        // Use setters to set values in user object
+        // If the value doesn't exist, each setter will receive null. Function of ?? null
+        $user->set_username(htmlspecialchars($data->username ?? null));
+        $user->set_name(htmlspecialchars($data->first_name ?? null),htmlspecialchars($data->middle_initial ?? null), htmlspecialchars($data->last_name ?? null));
+        $user->set_phone_no(htmlspecialchars($data->phone_no ?? null));
+        $user->set_email(htmlspecialchars($data->email ?? null));
+        $user->set_address(htmlspecialchars($data->address ?? null));
+        $user->set_sex(htmlspecialchars($data->sex ?? null));
+        $user->set_user_type(htmlspecialchars($data->user_type ?? null));
+        $user->set_password(htmlspecialchars($data->password ?? null));
 
+        // Setting values specific to employee user type.
         if($data->user_type == "employee"){
-            $user->set_background_check(htmlspecialchars($data->background_check));
-            $user->set_date_of_birth(htmlspecialchars($data->date_of_birth));
-            $user->set_start_date(htmlspecialchars($data->start_date));
-            $user->set_employee_type(htmlspecialchars($data->employee_type));
+            $user->set_background_check(htmlspecialchars($data->background_check ?? null));
+            $user->set_date_of_birth(htmlspecialchars($data->date_of_birth ?? null));
+            $user->set_start_date(htmlspecialchars($data->start_date ?? null));
+            $user->set_employee_type(htmlspecialchars($data->employee_type ?? null));
+
+            // Setting value specific to teacher assistants.
+            if($data->employee_type == "TA"){
+                $user->set_class_name(htmlspecialchars($data->class_name ?? null));
+            }
         }
 
-        if($data->employee_type == "TA"){
-            $user->set_class_name(htmlspecialchars($data->class_name));
-        }
-
-        //Checks if user exists  
+        // Checks if user already exists  
         if($user->check_user()){
-            //Register User
+            // Register User
             if($user->register()){
-                //Change associative array to JSON.
+                // Change associative array to JSON.
+                // Send the response code and the message.
+                http_response_code(200);
                 echo json_encode(
                     array(
-                        "message" => "User created successfully"
+                        "message" => "User created successfully!"
                     )
                 );
             }else{
-                throw new Exception("Server Error.");
+                throw new Exception("Server Error.", 500);
             }
         }else{
-            throw new Exception("User already exists!");
+            throw new Exception("User already exists!", 409);
         }
     }catch(Exception $e){
+        // If an exception occurs, send the HTTP code and its message.
+        http_response_code($e->getCode());
         echo json_encode(
             array(
                 "message" => $e->getMessage()
