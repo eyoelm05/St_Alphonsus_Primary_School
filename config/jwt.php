@@ -1,10 +1,20 @@
 <?php
-    //autoload.php: helps the system interpret library classes such as dotenv and jwt.
+    // Portion of this code is from:
+    // Techiediaries.com. (2019). PHP JWT & REST API Authentication Tutorial: Login and Signup | Techiediaries. 
+    // Available at: https://www.techiediaries.com/php-jwt-authentication-tutorial/
+
+    // Using vlucas/phpdotenv for reading environmental variables
+    // Source:https://github.com/vlucas/phpdotenv
+
+    // Using firebase/php-jwt for JWT encoding and decoding
+    // Source: https://github.com/firebase/php-jwt
+
+    // autoload.php: helps the system interpret library classes such as dotenv and jwt.
     require_once __DIR__ . '/../vendor/autoload.php';
-    //Import Dotenv class
+    // Import Dotenv class
     use Dotenv\Dotenv;
-    //Import JWT class and key taken from: https://github.com/firebase/php-jwt 
-    use \Firebase\JWT\JWT;
+
+    use Firebase\JWT\JWT;
     use Firebase\JWT\Key;
 
     class JWT_TOKEN {
@@ -13,46 +23,46 @@
         private $audience = "parent_and_employee_of_the_school";
 
         public function __construct(){
-            //Code from: https://github.com/vlucas/phpdotenv
+            // Initiating dotenv to read data.
             $dotenv = Dotenv::createImmutable(realpath(__DIR__ . '/../'));
             $dotenv->load();
 
-            //My code
-            //Set value of secret key from environmental variable
+            // Set value of secret key from environmental variable
             $this->secret_key = $_ENV["SECRET_KEY"];
         }
 
         public function issue_token($username,$user_type,$employee_type = null){
-            //The following code is taken from https://www.techiediaries.com/php-jwt-authentication-tutorial.
-            //However, some portions have been omitted, because they are not necessary for this project.
-            //Omissions will be indicated with a comment.
+            // The following code is taken from (Techiediaries.com, 2019).
+            // However, some portions have been omitted, because they are not necessary for this project.
+            // Omissions will be indicated as  a comment.
             $token = array(
                 "iss" => $this->issuer,
                 "aud" => $this->audience,
-                "iat" => time(), //The time when the token is issued
-                //"nbf" => $notbefore_claim, Omitted because this project doesn't need a time gap to activate the token.
-                "exp" => time() + 2*60*60,//Token expires after 2hours(7,200 seconds)
+                "iat" => time(), // The time when the token is issued
+                // "nbf" => $notbefore_claim, Omitted because this project doesn't need a time gap to activate the token.
+                "exp" => time() + 2*60*60,// Token expires after 2hours(7,200 seconds)
                 "data" => array(
                     "username" => $username,
                     "user_type" => $user_type,
                     "employee_type" => $employee_type
-            ));//Data stored in the token.
+            ));// Data stored in the token (payload).
+            // End of reference code.
 
-            //Encode data to a jwt token
-            //'HS256' this is the algorithm used to create the token
+            // My custom code
+            // Encode data to a jwt token
+            // 'HS256' this is the algorithm used to create the token
             $jwt = JWT::encode($token, $this->secret_key, 'HS256');
             return $jwt;
         }
 
         public function verify_token($jwt){
             try{
-                //Decode JWT token
-                //'HS256' this is the algorithm used to create the token
-                //This code is taken from: https://github.com/firebase/php-jwt
+                // Decode JWT token
+                // 'HS256' this is the algorithm used to create the token
                 $decoded = JWT::decode($jwt, new Key($this->secret_key, 'HS256'));
                 return (array)$decoded;
             }catch(Exception $e){
-                throw new Exception ("Invalid token!");
+                throw new Exception ("Invalid token!", 401);
             }
         }
     }
