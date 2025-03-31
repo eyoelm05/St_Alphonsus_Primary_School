@@ -44,11 +44,11 @@
             throw new Exception ("Please input both username and password", 400);
         }
 
-        //Sanitize data
+        // Sanitize data
         $username = htmlspecialchars($data->username);
         $password = htmlspecialchars($data->password);
 
-        //Call login function to verify username and password.
+        // Call login function to verify username and password.
         $login_data = $user->login($username,$password);
 
         // Check if employee_type exists and then add it to token payload.
