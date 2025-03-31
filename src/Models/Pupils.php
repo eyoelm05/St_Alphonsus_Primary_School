@@ -1,9 +1,12 @@
 <?php
+    // The code in this file is entirely custom made by me.
+    // Please note that explanation for querying the database are explained in users model.
+
     class Pupil{
-        //Create connection property
+        // Variable for db connection
         private $conn;
 
-        //Properties of pupils
+        // Properties of pupils
         private $first_name;
         private $middle_initial;
         private $last_name;
@@ -14,11 +17,12 @@
         private $medicals;
 
 
-        //Construct function to use the database
+        // Construct function connect to the database
         public function __construct($db){
             $this->conn = $db;
         }
 
+        // Setters for each value
         public function set_name($first_name, $middle_initial, $last_name) {
             // Trim whitespace
             $first_name = trim($first_name);
@@ -27,20 +31,20 @@
         
             // Check if first and last name are empty
             if (empty($first_name)) {
-                throw new Exception("First name can't be empty!");
+                throw new Exception("First name can't be empty!", 400);
             }
             if (empty($last_name)) {
-                throw new Exception("Last name can't be empty!");
+                throw new Exception("Last name can't be empty!", 400);
             }
         
             // Ensure names contain only letters
             if (!ctype_alpha($first_name) || !ctype_alpha($last_name)) {
-                throw new Exception("Names must contain only alphabetic characters.");
+                throw new Exception("Names must contain only alphabetic characters.", 400);
             }
         
             // Middle initial is optional, but if provided, must be a single alphabetic character
             if (!empty($middle_initial) && (!ctype_alpha($middle_initial) || strlen($middle_initial) > 1)) {
-                throw new Exception("Middle initial must be a single letter.");
+                throw new Exception("Middle initial must be a single letter.", 400);
             }
         
             // Assign values
@@ -50,29 +54,27 @@
         }
 
         public function set_sex($sex){
-            //Trim white space
             $sex = trim($sex);
 
-            //Check if sex exists
+            // Check if sex exists
             if(empty($sex)){
-                throw new Exception("Sex can't be empty!");
+                throw new Exception("Sex can't be empty!", 400);
             }
 
-            //Make sure sex is inputted correctly
+            // Make sure sex is inputted correctly
             if($sex !== "M" && $sex !== "F" && $sex !== "O"){
-                throw new Exception("Sex can't be anything other than male, female or other");
+                throw new Exception("Sex can't be anything other than male, female or other", 400);
             }
 
             $this->sex = $sex;
         }
 
         public function set_address($address){
-            //Trim white space
             $address = trim($address);
 
             //Check if address exists
             if(empty($address)){
-                throw new Exception("Address can't be empty!");
+                throw new Exception("Address can't be empty!", 400);
             }
 
             $this->address = $address;
@@ -81,17 +83,16 @@
         public function set_date_of_birth($date_of_birth){
             //Check if date of birth exists
             if(empty($date_of_birth)){
-                throw new Exception ("Date of birth can't be empty!");
+                throw new Exception ("Date of birth can't be empty!", 400);
             }
 
             $this->date_of_birth = $date_of_birth;
         }
 
         public function set_class_name($class_name){
-            //Trim white space
             $class_name = trim($class_name);
 
-            //Validate class_name
+            // Validate class_name
             if($class_name != "Reception Year" && 
             $class_name != "Year 1" && 
             $class_name != "Year 2" &&
@@ -100,7 +101,7 @@
             $class_name != "Year 5" &&
             $class_name != "Year 6"
             ){
-                throw new Exception ("Enter proper class please!");
+                throw new Exception ("Enter proper class please!", 400);
             }
 
             $this->class_name = $class_name;
@@ -108,41 +109,50 @@
 
 
         public function set_medicals($medicals){
+
             //If medicals exists it has to be an array.
             if(!empty($medicals) && !is_array($medicals)){
-                throw new Exception ("Medicals must be an array");
+                throw new Exception ("Medicals must be an array", 400);
             }
             $this->medicals = $medicals;
         }
 
+        // Check parent method
         public function check_parent($username, $id){
+            // Set parent variable to false.
             $parent = false;
+
+            // Query to retrieve pupil id
             $query = "SELECT pupil_id as id FROM pupil_parent WHERE username = :username";
             
             $stmt = $this->conn->prepare($query);
             if($stmt->execute([
                 "username" => $username
             ])){
+                // Fetch rows as arrays
                 $rows = $stmt->fetchAll();
+
+                // Loop over the ids from the database.
                 foreach($rows as $row){
+                    // Check if a value similar to the argument id exists.
                     if($row["id"] == $id){
                         $parent = true;
                     }
                 }
             }else{
-                throw new Exception ("Server Error.");
+                throw new Exception ("Server Error!", 500);
             }
 
             return $parent;
         }
 
+        // Add pupil method
         public function add_pupil($parent_username, $relationship){
             $query_pupil = "INSERT INTO pupils (first_name, middle_initial, last_name, date_of_birth, address, sex, class_name)
                             VALUES (:first_name, :middle_initial, :last_name, :date_of_birth, :address, :sex, :class_name);";
-            //Prepare statement
+
             $stmt = $this->conn->prepare($query_pupil);
 
-            //Execute query
             if($stmt->execute([
                 "first_name" => $this->first_name,
                 "middle_initial" => $this->middle_initial,
@@ -152,14 +162,14 @@
                 "sex" => $this->sex,
                 "class_name" => $this->class_name
             ])){
-                //Retrieve the id of the new pupil.
+                // Retrieve the id of the new pupil.
                 $pupil_id = $this->conn->lastInsertId();
 
-                //Query to add pupil parent relationship.
+                // Query to add pupils
                 $query_pupil_parent = "INSERT INTO pupil_parent (username, pupil_id, relationship)
                                         VALUES (:username, :pupil_id, :relationship)";
                                         
-                //Handle Inserting medical info
+                // Handle Inserting medical info
                 if($this->medicals){
                     foreach ($this->medicals as $medical_info) {
                         $query_pupil_medicals = "INSERT INTO pupil_medicals (medical_info, pupil_id) VALUES (:medical_info, :pupil_id)";
@@ -172,10 +182,9 @@
                     }
     
                 }
-                //Prepare Query
+
                 $stmt1 = $this->conn->prepare($query_pupil_parent);
 
-                //Execute Query
                 if($stmt1->execute([
                     "username" => $parent_username,
                     "pupil_id" => $pupil_id,
@@ -187,13 +196,13 @@
                 }
 
             }else{
-                throw new Exception ("Failed to add pupil.");
+                throw new Exception ("Server Error!", 500);
             }
             
         }
 
         public function read_single($id){
-            //Query to retrieve pupil information with parents and teachers
+            // Query to retrieve pupil information with parents and teachers
             $query = "
                 SELECT 
                 p.pupil_id as id,
@@ -216,17 +225,16 @@
                 LEFT JOIN pupil_medicals pm ON p.pupil_id = pm.pupil_id
                 WHERE p.pupil_id = :id
             ";
-            //Prepare statement
+
             $stmt = $this->conn->prepare($query);
 
-            //Execute statement
             if($stmt->execute(array(
                 "id" => $id
             ))){
                 $pupil = $stmt->fetch();
                 return $pupil;
             }else{
-                throw new Exception ("Server Error.");
+                throw new Exception ("Server Error!", 500);
             }
         } 
 
@@ -242,22 +250,21 @@
                 LEFT JOIN pupil_parent pp ON p.pupil_id = pp.pupil_id
                 WHERE pp.username = :username
             ";
-            //Prepare statement
+
             $stmt = $this->conn->prepare($query);
 
-            //Execute statement
             if($stmt->execute(array(
                 "username" => $username
             ))){
-                //Fetch pupils
                 $pupils = $stmt->fetchAll();
                 return $pupils;
             }else{
-                throw new Exception ("Server Error.");
+                throw new Exception ("Server Error!", 500);
             }
         }
 
         public function read_class($class_name){
+            // Query to get pupils in a single class
             $query = "
                 SELECT
                 p.pupil_id as id,
@@ -266,30 +273,27 @@
                 FROM pupils p
                 WHERE p.class_name = :class_name
             ";
-            //Prepare statement
+
             $stmt = $this->conn->prepare($query);
 
-            //Execute statement
             if($stmt->execute(array(
                 "class_name" => $class_name
             ))){
-                //Fetch pupils
                 $pupils = $stmt->fetchAll();
                 return $pupils;
             }else{
-                throw new Exception ("Server Error.");
+                throw new Exception ("Server Error!", 500);
             }
         }
 
         public function update($id){
+            // Query to update user details
             $query = "UPDATE pupils SET first_name = :first_name, middle_initial = :middle_initial, last_name = :last_name, 
                         date_of_birth = :date_of_birth, address = :address, sex = :sex, class_name = :class_name
                         WHERE pupil_id = :id";
 
-            //Prepare statement
             $stmt = $this->conn->prepare($query);
 
-            //Execute query
             if($stmt->execute([
                 "first_name" => $this->first_name,
                 "middle_initial" => $this->middle_initial,
@@ -300,12 +304,13 @@
                 "class_name" => $this->class_name,
                 "id" => $id
             ])){
-                //Delete all medical queries first
+                // Updating medical info
+                // Delete all medical queries first
                 $query_dm = "DELETE FROM pupil_medicals WHERE pupil_id = :id";
                 $stmt_dm = $this->conn->prepare($query_dm);
                 $stmt_dm->execute(["id" => $id]);
                 
-                //Handle Inserting medical info
+                // Handle Inserting medical info
                 if($this->medicals){
                         foreach ($this->medicals as $medical_info) {
                             $query_pupil_medicals = "INSERT INTO pupil_medicals (medical_info, pupil_id) VALUES (:medical_info, :pupil_id)";
@@ -316,10 +321,11 @@
                                 "pupil_id" => $id
                             ]);
                         }
-                        return true;
-                }else{
-                    return true;
                 }
+
+                return true;
+            }else{
+                return false;
             }
             
         }
