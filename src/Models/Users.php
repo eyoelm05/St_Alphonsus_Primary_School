@@ -279,7 +279,7 @@
 
                 return $row;
             }else{
-                throw new Exception ("Invalid Credentials!", 400);
+                throw new Exception ("Invalid Credentials!", 401);
             }
         }
 

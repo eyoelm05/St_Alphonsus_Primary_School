@@ -1,77 +1,82 @@
 <?php
-    // Headers: Taken from https://github.com/bradtraversy/php_rest_myblog
-    // Allows this API to be accessed from any domain.
-    header('Access-Control-Allow-Origin: *');
-    // Sets the content type to JSON, meaning this API sends and receives JSON data.
-    header('Content-Type: application/json');
-    // Specifies the request methods that this API can receive. In this case, the API can only be accessed if the request is made with a POST method.
-    header('Access-Control-Allow-Methods: POST');
-    // Specifies the headers that are allowed in the request. This enables the API to accept headers like Content-Type, Access-Control-Allow-Methods, Authorization, and X-Requested-With.
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    // Portions of this code are adapted from:
+    // Traversy, B. (2019) 'PHP REST API - MyBlog', GitHub. Available at: 
+    // https://github.com/bradtraversy/php_rest_myblog.
 
-    // My Code 
-    // header to be able to set cookies.
-    //The server allows credentials to be included in cross-origin HTTP requests.(MDN Web Docs, 2025)
+    // Header details explained in users/register.php
+    // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    // End of external code.
+
+    // My Custom Code 
+    // Header to be able to set cookies.
+    // The server allows credentials to be included in cross-origin HTTP requests. Description taken from (MDN Web Docs, 2025).
     header("Access-Control-Allow-Credentials: true");
 
 
-    //Import required files.
+    // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Users.php";
     require_once __DIR__."/../../config/jwt.php";
+    // End of my custom code.
 
-    //Instantiate database and connect it. 
-    //Taken from https://github.com/bradtraversy/php_rest_myblog.
+    // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
+    // Instantiate database and connect it. 
     $database = new Database();
     $db = $database->connect();
 
-    //Taken from https://github.com/bradtraversy/php_rest_myblog.
-    //This code get's the data sent from an external server.
-    //Description of each part.
-    //json_decode()- decodes a json data and converts into php associative array.
-    //file_get_contents() - used to read raw data from files or links.
-    //php://input - is a read only stream that is used to access raw post data.
+    // Get raw data.
+    // Explanation in user/register.php
     $data = json_decode(file_get_contents("php://input"));
+    // End of external code.
 
-    //Create an instance of user and jwt objects.
+    // My custom code
+    // Create an instance of user and jwt objects.
     $user = new User($db);
     $jwt_object = new JWT_TOKEN();
 
-
-
     try{
-        //Check if $data has a value
+        // Check if the raw data has the required values.
         if (!$data || !isset($data->username) || !isset($data->password)) {
-            throw new Exception ("Please input both username and password");
+            throw new Exception ("Please input both username and password", 400);
         }
+
         //Sanitize data
         $username = htmlspecialchars($data->username);
         $password = htmlspecialchars($data->password);
 
-        //Call in login function to verify username and password.
+        //Call login function to verify username and password.
         $login_data = $user->login($username,$password);
 
-        //Check if employee_type exists and then add it token if it does.
-        //If it doesn't just store username and user type inside the token.
-        //Use issue token from JWT_TOKEN object to create the token.
+        // Check if employee_type exists and then add it to token payload.
+        // Use issue token function from JWT_TOKEN object to create the token.
         if($login_data["employee_type"]){
             $token = $jwt_object->issue_token($login_data["username"], $login_data["user_type"], $login_data["employee_type"]);
         }else{
+            // If employee_type doesn't exist just store username and user type inside the token payload.
             $token = $jwt_object->issue_token($login_data["username"], $login_data["user_type"]);
         }
+
+        // Set cookie auth in the front-end with the token value.
         setcookie("auth", $token,time() + 2*60*60, "/", "",true, true);
+
+        http_response_code(200);
         echo json_encode(
             array(
                 "message" => "User logged in."
             )
-            );
+        );
+
     }catch(Exception $e){
+        // If an exception occurs, send the HTTP code and its message.
+        http_response_code($e->getCode());
         echo json_encode(
             array(
                 "message" => $e->getMessage()
             )
         );
     }
-
-
 ?>
