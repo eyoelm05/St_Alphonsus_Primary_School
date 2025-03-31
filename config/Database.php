@@ -1,50 +1,62 @@
 <?php
-//autoload.php: helps the system interpret library classes such as dotenv.
-require_once __DIR__ . '/../vendor/autoload.php';
-use Dotenv\Dotenv;
+    // Portions of this code are adapted from:
+    // Nixon, R. (2025). Learning PHP, MySQL & JavaScript. ‘O’Reilly Media, Inc.’
 
-class Database {
-    //DB Parameters
-    private $host;
-    private $db_name;
-    private $username;
-    private $password;
-    private $conn;
 
-    public function __construct() {
-        //Code from: https://github.com/vlucas/phpdotenv
-        $dotenv = Dotenv::createImmutable(realpath(__DIR__ . '/../'));
-        $dotenv->load();
+    // Using vlucas/phpdotenv for reading environmental variables
+    // Source:https://github.com/vlucas/phpdotenv
 
-        //My code starts
-        //Fetching secret information from .env file
-        $this->host = $_ENV['DB_HOST'];
-        $this->db_name = $_ENV['DB_NAME'];
-        $this->username = $_ENV['DB_USER'];
-        $this->password = $_ENV['DB_PASS'];
-    }
 
-    public function connect(){
-        $this->conn = null;
+    // autoload.php: helps the system interpret library classes such as dotenv.
+    require_once __DIR__ . '/../vendor/autoload.php';
+    use Dotenv\Dotenv;
 
-        try{
-            $dbattr = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4";
+    class Database {
+        // DB Parameters
+        private $host;
+        private $db_name;
+        private $username;
+        private $password;
+        private $conn;
 
-            //Code from close Learning PHP, MySQL & JavaScript, 7th Edition, Robin Nixon
-            $opts   =
-            [
-              PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-              PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-              PDO::ATTR_EMULATE_PREPARES   => false,
-            ];
+        public function __construct() {
+            // Initiating dotenv to read data.
+            $dotenv = Dotenv::createImmutable(realpath(__DIR__ . '/../'));
+            $dotenv->load();
 
-            $this->conn = new PDO($dbattr, $this->username, $this->password, $opts);
-           
-        }catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            // Fetching secret information from .env file
+            $this->host = $_ENV['DB_HOST'];
+            $this->db_name = $_ENV['DB_NAME'];
+            $this->username = $_ENV['DB_USER'];
+            $this->password = $_ENV['DB_PASS'];
         }
 
-        //My code
-        return $this->conn;
+        public function connect(){
+            $this->conn = null;
+
+            try{
+                $dbattr = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4";
+
+                // Adapted from Nixon, R. (2025). Learning PHP, MySQL & JavaScript. ‘O’Reilly Media, Inc.’
+                // Options to set error and fetch modes to pdo.
+                $opts   =
+                [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
+                ];
+
+                $this->conn = new PDO($dbattr, $this->username, $this->password, $opts);
+            
+            }catch (\PDOException $e) {
+                // Pdo exception send message and code from database error.
+                throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            }
+
+            // End of reference code.
+
+            // My custom code
+            return $this->conn;
+        }
     }
-}
+?>

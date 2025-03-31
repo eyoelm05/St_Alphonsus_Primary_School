@@ -3,6 +3,9 @@
     // Techiediaries.com. (2019). PHP JWT & REST API Authentication Tutorial: Login and Signup | Techiediaries. 
     // Available at: https://www.techiediaries.com/php-jwt-authentication-tutorial/
 
+    // Using vlucas/phpdotenv for reading environmental variables
+    // Source:https://github.com/vlucas/phpdotenv
+
     // Using firebase/php-jwt for JWT encoding and decoding
     // Source: https://github.com/firebase/php-jwt
 
@@ -20,6 +23,7 @@
         private $audience = "parent_and_employee_of_the_school";
 
         public function __construct(){
+            // Initiating dotenv to read data.
             $dotenv = Dotenv::createImmutable(realpath(__DIR__ . '/../'));
             $dotenv->load();
 
