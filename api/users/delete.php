@@ -1,45 +1,64 @@
 <?php
-    // Headers: Taken from https://github.com/bradtraversy/php_rest_myblog
-    // Allows this API to be accessed from any domain.
-    header('Access-Control-Allow-Origin: *');
-    // Sets the content type to JSON, meaning this API sends and receives JSON data.
-    header('Content-Type: application/json');
-    // Specifies the request methods that this API can receive. In this case, the API can only be accessed if the request is made with a POST method.
-    header('Access-Control-Allow-Methods: DELETE');
-    // Specifies the headers that are allowed in the request. This enables the API to accept headers like Content-Type, Access-Control-Allow-Methods, Authorization, and X-Requested-With.
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    // Portions of this code are adapted from:
+    // Traversy, B. (2019) 'PHP REST API - MyBlog', GitHub. Available at: 
+    // https://github.com/bradtraversy/php_rest_myblog.
+    // And
+    // Nixon, R. (2025). Learning PHP, MySQL & JavaScript. ‘O’Reilly Media, Inc.’
 
-    // My Code 
-    // header to be able to set cookies.
-    //The server allows credentials to be included in cross-origin HTTP requests.(MDN Web Docs, 2025)
+    // Header details explained in users/register.php
+    // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    // End of external code.
+
+    // My Custom Code 
+    // Header to be able to set cookies. Details explained in users/login.php
     header("Access-Control-Allow-Credentials: true");
 
-    //Import required files.
+    // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Users.php";
+    require_once __DIR__."/../../config/jwt.php";
     require_once __DIR__."/../../src/Controller/auth_controller.php";
+    // End of my custom code.
 
-    //Authenticate current user
-    $current_user = authenticate();
-
-    //Instantiate database and connect it. 
-    //Taken from https://github.com/bradtraversy/php_rest_myblog.
+    // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
+    // Instantiate database and connect it. 
     $database = new Database();
     $db = $database->connect();
+
+    // Get raw data.
+    // Explanation in user/register.php
+    $data = json_decode(file_get_contents("php://input"));
+    // End of external code.
+
+    // My custom code
+    // Authenticate current user. Function explanation found in src/controller/auth_controller.php
+    $current_user = authenticate();
 
     $user = new User($db);
 
     try{
         if($user->delete($current_user->username)){
-            //Destroy the cookie
+            // End of my custom code.
+            
+            // Adapted from Nixon, R. (2025). Learning PHP, MySQL & JavaScript. ‘O’Reilly Media, Inc.’
+            // Destroy the cookie.
             setcookie('auth', '', time() - 2592000, '/');
+            //End of external code.
+
+            // My custom code
+            http_response_code(200);
             echo json_encode(array(
                 "message" => "User deleted successfully!"
             ));
         }else{
-            throw new Exception ("Unable to delete user!");
+            throw new Exception ("Server Error!", 500);
         }
     }catch (Exception $e){
+        http_response_code($e->getCode());
         echo json_encode(
             array(
                 "message" => $e->getMessage()

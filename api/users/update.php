@@ -20,7 +20,7 @@
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Users.php";
     require_once __DIR__."/../../config/jwt.php";
-    require_once __DIR__."/../../Controller/auth_controller.php";
+    require_once __DIR__."/../../src/Controller/auth_controller.php";
     // End of my custom code.
 
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
