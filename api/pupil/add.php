@@ -12,8 +12,7 @@
     // End of external code.
 
     // My Custom Code 
-    // Header to be able to set cookies.
-    // The server allows credentials to be included in cross-origin HTTP requests. Description taken from (MDN Web Docs, 2025).
+    // Header to be able to set cookies. Details explained in users/login.php
     header("Access-Control-Allow-Credentials: true");
 
     // Import required files.
