@@ -62,6 +62,7 @@
         if($data->relationship){
             // Execute add_pupil
             if($pupil->add_pupil($user->username, htmlspecialchars($data->relationship))){
+                http_response_code(200);
                 echo json_encode(array(
                     "message" => "Pupil added successfully"
                 ));
