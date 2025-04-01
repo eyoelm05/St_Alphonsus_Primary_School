@@ -5,7 +5,7 @@
 
     // Header details explained in users/register.php
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
-    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Origin: http://127.0.0.1:5500');
     header('Content-Type: application/json');
     header('Access-Control-Allow-Methods: POST');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
@@ -53,7 +53,7 @@
 
         // Check if employee_type exists and then add it to token payload.
         // Use issue token function from JWT_TOKEN object to create the token.
-        if($login_data["employee_type"]){
+        if($login_data["employee_type"] ?? null){
             $token = $jwt_object->issue_token($login_data["username"], $login_data["user_type"], $login_data["employee_type"]);
         }else{
             // If employee_type doesn't exist just store username and user type inside the token payload.
