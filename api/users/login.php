@@ -5,7 +5,7 @@
 
     // Header details explained in users/register.php
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
-    header('Access-Control-Allow-Origin: http://127.0.0.1:5500');
+    header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
     header('Access-Control-Allow-Methods: POST');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
@@ -61,7 +61,7 @@
         }
 
         // Set cookie auth in the front-end with the token value.
-        setcookie("auth", $token,time() + 2*60*60, "/", "",true, true);
+        setcookie("auth", $token,time() + 2*60*60, "/", "",false, true);
 
         http_response_code(200);
         echo json_encode(

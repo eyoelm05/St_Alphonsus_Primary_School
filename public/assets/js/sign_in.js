@@ -3,7 +3,6 @@ const response_message = document.getElementById('response_message');
 
 login_form.addEventListener('submit', async function (event) {
     event.preventDefault(); 
-
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     
