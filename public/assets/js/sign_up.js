@@ -1,7 +1,7 @@
 const user_type = document.getElementById("user_type");
 const submit_btn = document.getElementById("submit");
 const register_form = document.getElementById("register_form");
-const employee_type = document.getElementById("employee_type");
+const response_message = document.getElementById('response_message')
 
 let employee_container = null;
 let ta_container = null;
@@ -137,3 +137,48 @@ function remove_TA_field() {
         ta_container = null;
     }
 }
+
+register_form.addEventListener("submit", async (event)=>{
+    event.preventDefault();
+    const password = document.getElementById("password").value;
+    const confirm_password = document.getElementById("confirm_password").value;
+
+    if (password !== confirm_password) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    const username = document.getElementById("username").value;
+    const first_name = document.getElementById("first_name").value;
+    const middle_initial = document.getElementById("middle_initial").value;
+    const last_name = document.getElementById("last_name").value;
+    const email = document.getElementById("email").value;
+    const phone_no = document.getElementById("phone_no").value;
+    const address = document.getElementById("address").value;
+    const sex = document.getElementById("sex").value;
+
+    let data = {username, first_name, middle_initial, last_name, email, phone_no, address, sex, password};
+    data.user_type = user_type.value;
+    if(employee_container){
+        const background_check = document.getElementById("background_check").checked;
+        const date_of_birth = document.getElementById("date_of_birth").value;
+        const start_date = document.getElementById("start_date").value;
+        const employee_type = document.getElementById("employee_type").value;
+        data.background_check = background_check;
+        data.date_of_birth = date_of_birth;
+        data.start_date = start_date;
+        data.employee_type = employee_type;
+        if(ta_container){
+            const class_name = document.getElementById("class_name").value;
+            data.class_name = class_name
+        }
+    }  
+
+    const options = {
+        method: "POST",
+        body: JSON.stringify(data),
+    };
+    const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/users/register.php", options);
+    const result = await response.json();
+    response_message.innerHTML = result.message;
+})
