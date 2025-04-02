@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St Alphonsus Primary school</title>
+</head>
+<body>
+    <form id="register_form">
+        <h1>Sign Up</h1>
+        <label for="username">Username: </label>
+        <input type="text" id="username" name="username" maxlength="20" required>
+        <br><br>
+        <label for="first_name">First Name: </label>
+        <input type="text" id="first_name" name="first_name" maxlength="50" required>
+        <br><br>
+        <label for="middle_initial">Middle Initial: </label>
+        <input type="text" id="middle_initial" name="middle_initial" maxlength="1">
+        <br><br>
+        <label for="last_name">Last Name: </label>
+        <input type="text" id="last_name" name="last_name" maxlength="50" required>
+        <br><br>
+        <label for="email">Email: </label>
+        <input type="email" name="email" id="email" required>
+        <br><br>
+        <label for="phone_no">Phone number: </label>
+        <input type="tel" name="phone_no" id="phone_no" placeholder="07xxx-xxxxxx" required>
+        <br><br>
+        <label for="sex">Sex: </label>
+        <select name="sex" id="sex" required>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+        </select>
+        <br><br>
+        <label for="user_type">User Type: </label>
+        <select name="user_type" id="user_type">
+            <option value="parent">Parent</option>
+            <option value="employee">Employee</option>
+        </select>
+        <br><br>
+        <button type="submit" id="submit">Sign Up</button>
+    </form>
+    <script src="assets/js/sign_up.js"></script>
+</body>
+</html>
