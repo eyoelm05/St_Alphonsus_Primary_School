@@ -248,6 +248,27 @@
             }    
         }
 
+        // Method to check if user exists
+        public function check_email(){
+            $query = 'SELECT COUNT(*) AS no_user FROM users WHERE email = :email';
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute(["email" => $this->email]);
+
+            // Fetch the first row
+            $row = $stmt->fetch();
+
+            // Cast row returned form the query to integer
+            settype($row["no_user"], "integer");
+
+            // Checks if there is user
+            if($row['no_user'] !== 0){
+                return false;
+            } else {
+                return true;
+            }    
+        }
+
         // Login method
         public function login($username, $password){
             $query = "SELECT username, user_type, password_hash FROM users WHERE username = :username";

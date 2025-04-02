@@ -80,9 +80,17 @@
         // Use setters to set values in user object
         // If the value doesn't exist, each setter will receive null. Function of ?? null
         $user->set_username(htmlspecialchars($data->username ?? null));
+
+        // Checks if user already exists  
+        if(!$user->check_user()){
+            throw new Exception("User already exists!", 409);
+        }
         $user->set_name(htmlspecialchars($data->first_name ?? null),htmlspecialchars($data->middle_initial ?? null), htmlspecialchars($data->last_name ?? null));
         $user->set_phone_no(htmlspecialchars($data->phone_no ?? null));
         $user->set_email(htmlspecialchars($data->email ?? null));
+        if(!$user->check_email()){
+            throw new Exception("Email already exists!", 409);
+        }
         $user->set_address(htmlspecialchars($data->address ?? null));
         $user->set_sex(htmlspecialchars($data->sex ?? null));
         $user->set_user_type(htmlspecialchars($data->user_type ?? null));
@@ -101,23 +109,18 @@
             }
         }
 
-        // Checks if user already exists  
-        if($user->check_user()){
-            // Register User
-            if($user->register()){
-                // Change associative array to JSON.
-                // Send the response code and the message.
-                http_response_code(200);
-                echo json_encode(
-                    array(
-                        "message" => "User created successfully!"
-                    )
-                );
-            }else{
-                throw new Exception("Server Error.", 500);
-            }
+        // Register User
+        if($user->register()){
+            // Change associative array to JSON.
+            // Send the response code and the message.
+            http_response_code(200);
+            echo json_encode(
+                array(
+                    "message" => "User created successfully!"
+                )
+            );
         }else{
-            throw new Exception("User already exists!", 409);
+            throw new Exception("Server Error.", 500);
         }
     }catch(Exception $e){
         // If an exception occurs, send the HTTP code and its message.
