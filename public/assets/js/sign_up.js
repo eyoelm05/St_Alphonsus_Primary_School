@@ -178,7 +178,14 @@ register_form.addEventListener("submit", async (event)=>{
         method: "POST",
         body: JSON.stringify(data),
     };
+
     const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/users/register.php", options);
     const result = await response.json();
     response_message.innerHTML = result.message;
+
+    if(response.status == 200){
+        setTimeout(() => {
+            window.location.href = 'sign_in.html';
+        }, 2000); 
+    }
 })
