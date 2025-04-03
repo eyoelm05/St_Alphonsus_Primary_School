@@ -40,39 +40,56 @@
     $pupil = new Pupil($db);
 
     try{
-        if($data->exist && $data->id){
-            
-        }
-        // Sanitize and set data
-        $pupil->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
-        $pupil->set_sex(htmlspecialchars($data->sex));
-        $pupil->set_address(htmlspecialchars($data->address));
-        $pupil->set_date_of_birth(htmlspecialchars($data->date_of_birth));
-        $pupil->set_class_name(htmlspecialchars($data->class_name));
+        // Check if student is existing and id is set
+        if($data->exists && $data->id){
+            // Check if relationship exists
+            if($data->relationship){
+                // Execute add_pupil
+                if($pupil->add_parent(htmlspecialchars($data->id),$user->username, htmlspecialchars($data->relationship))){
+                    http_response_code(200);
+                    echo json_encode(array(
+                        "message" => "Pupil added successfully"
+                    ));
+                }else{
+                    throw new Exception ("Server Error!", 500);
+                }
+            } else{
+                throw new Exception ("Relationship can't be empty!", 400);
+            }
+        }elseif($data->exist && !$data->id){
+            throw new Exception ("Please input id of the registered student!", 400);
+        }else{
+            // Sanitize and set data
+            $pupil->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
+            $pupil->set_sex(htmlspecialchars($data->sex));
+            $pupil->set_address(htmlspecialchars($data->address));
+            $pupil->set_date_of_birth(htmlspecialchars($data->date_of_birth));
+            $pupil->set_class_name(htmlspecialchars($data->class_name));
 
-        // dd medicals only if it exists
-        if($data->medicals){
-            $medicals = [];
-            foreach($data->medicals as $medical_info){
-                array_push($medicals, htmlspecialchars($medical_info));
+            // add medicals only if it exists
+            if($data->medicals){
+                $medicals = [];
+                foreach($data->medicals as $medical_info){
+                    array_push($medicals, htmlspecialchars($medical_info));
+                }
+
+                $pupil->set_medicals($medicals);
             }
 
-            $pupil->set_medicals($medicals);
-        }
-
-        // Check if relationship exists
-        if($data->relationship){
-            // Execute add_pupil
-            if($pupil->add_pupil($user->username, htmlspecialchars($data->relationship))){
-                http_response_code(200);
-                echo json_encode(array(
-                    "message" => "Pupil added successfully"
-                ));
-            }else{
-                throw new Exception ("Server Error!", 500);
+            // Check if relationship exists
+            if($data->relationship){
+                // Execute add_pupil
+                if($pupil->add_pupil($user->username, htmlspecialchars($data->relationship))){
+                    http_response_code(200);
+                    echo json_encode(array(
+                        "message" => "Pupil added successfully"
+                    ));
+                }else{
+                    throw new Exception ("Server Error!", 500);
+                }
+            } else{
+                throw new Exception ("Relationship can't be empty!", 400);
             }
-        } else{
-            throw new Exception ("Relationship can't be empty!", 400);
         }
     }catch(Exception $e){
         http_response_code($e->get_code());
