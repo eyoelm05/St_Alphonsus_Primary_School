@@ -17,12 +17,16 @@ login_form.addEventListener('submit', async function (event) {
     const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/users/login.php", options);
     const result = await response.json();
     response_message.innerHTML = result.message;
-
+    
     if(response.status == 200){
         if(result.user_type === "parent"){
             setTimeout(() => {
                 window.location.href = 'read_parent.html';
             }, 2000)
-        }; 
+        }else{
+            setTimeout(() => {
+                window.location.href = 'read_teacher.html';
+            }, 2000); 
+        }
     }
 });

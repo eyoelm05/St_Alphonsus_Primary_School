@@ -10,7 +10,7 @@
         // Check if user type is parent $users->user_type because by default decoding a jwt token gives you an object
         if($users->user_type != "parent"){
             http_response_code(401);
-            echo json_encode(["message" => "Access Denied: Parents"]);
+            echo json_encode(["message" => "Access Denied: Parents only"]);
             exit();
         }
 
