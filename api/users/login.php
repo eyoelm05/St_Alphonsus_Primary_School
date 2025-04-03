@@ -66,7 +66,8 @@
         http_response_code(200);
         echo json_encode(
             array(
-                "message" => "User logged in."
+                "message" => "User logged in.",
+                "user_type" => $login_data["user_type"]
             )
         );
 
