@@ -21,6 +21,12 @@ async function read_parent() {
 
             pupil_container.innerHTML = `<hr><h3>${pupil.name}</h3><h4>${pupil.current_class}</h4><h4>${pupil.date_of_birth}</h4><hr>`
             container.appendChild(pupil_container);
+
+            pupil_container.addEventListener("click", () => {
+                const params = new URLSearchParams();
+                params.append("id", pupil_container.id);
+                location.href = "read_single.html?" + params.toString();
+            })
         });
     }
 }
