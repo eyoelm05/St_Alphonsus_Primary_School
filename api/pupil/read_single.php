@@ -14,10 +14,10 @@
     // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Pupils.php";
-    require_once __DIR__."/../../src/Middleware/auth_middleware.php";
+    require_once __DIR__."/../../src/Controller/auth_controller.php";
 
     // Protect route
-    $user = authorize_employee();
+    $user = authenticate();
     // End of my custom code.
 
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
@@ -26,23 +26,33 @@
     $db = $database->connect();
     // End of external code.
 
-    //Instantiate a new pupil
+    // Instantiate a new pupil
     $pupil = new Pupil($db);
 
     try{
-        // Get class name for $_GET super global variable
-        // Sent through params from front-end
-        if(isset($_GET["class_name"])){
-            // Read pupil in a single class
-            $class_name = $_GET["class_name"];
-            $data = $pupil->read_class($class_name);
-        }else{
-            throw new Exception("You must enter a class", 400);
+        // Get Id for $_GET super global variable
+        if(isset($_GET["id"])){
+            $id = $_GET["id"];
+            
+            // Check the user accessing the data
+            if($user->user_type == "parent"){
+                // Check if parent is related to the pupil they are trying to access
+                if($pupil->check_parent($user->username, $id)){
+                    // Read pupil wit the specific id.
+                    $data = $pupil->read_single($id);
+                }else{
+                    throw new Exception ("Unauthorized!", 401);
+                } 
+            }elseif($user->user_type == "employee"){
+                $data = $pupil->read_single($id);
+            }else{
+                throw new Exception ("Unauthorized!", 401);
+            }
         }
 
         http_response_code(200);
         echo json_encode(array(
-            "pupils" => $data
+            "pupil" => $data
         ));
         
     }catch(Exception $e){

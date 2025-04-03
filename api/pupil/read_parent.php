@@ -30,21 +30,8 @@
     $pupil = new Pupil($db);
 
     try{
-        // Get Id for $_GET super global variable
-        if(isset($_GET["id"])){
-            $id = $_GET["id"];
-            // Check if parent is related to the pupil they are trying to access
-            if($pupil->check_parent($user->username, $id)){
-                // Read pupil wit the specific id.
-                $data = $pupil->read_single($id);
-            }else{
-                throw new Exception ("Unauthorized!", 401);
-            }
-            
-        }else{
-            // Read pupil listed under the current parent.
-            $data = $pupil->read_parent($user->username);
-        }
+        // Read pupil linked with the current username
+        $data = $pupil->read_parent($user->username);
 
         http_response_code(200);
         echo json_encode(array(
