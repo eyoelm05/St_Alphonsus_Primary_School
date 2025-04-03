@@ -93,7 +93,7 @@
             $class_name = trim($class_name);
 
             // Validate class_name
-            if($class_name != "Year 0" && 
+            if($class_name != "Reception Year" && 
             $class_name != "Year 1" && 
             $class_name != "Year 2" &&
             $class_name != "Year 3" &&

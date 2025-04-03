@@ -101,7 +101,7 @@ function add_TA_field() {
     class_select.required = true;
 
     const options = [
-        {value: "Year 0", text: "Reception Year"},
+        {value: "Reception Year", text: "Reception Year"},
         {value: "Year 1", text: "Year 1"},
         {value: "Year 2", text: "Year 2"},
         {value: "Year 3", text: "Year 3"},
