@@ -201,6 +201,36 @@
             
         }
 
+        public function add_parent($id, $username, $relationship){
+            $query_select = "SELECT count(*) AS no_pupil FROM pupils WHERE pupil_id = :id";
+            $stmt1 = $this->conn->prepare($query_select);
+
+            if($stmt1->execute(array(
+                "id" => $id
+            ))){
+                $row = $stmt1->fetch();
+                if($row["no_pupil"]){
+                    $query_insert = "INSERT INTO pupil_parent(pupil_id, username, relationship)
+                                    VALUES (:id, :username, :relationship)";
+                    $stmt2 = $this->conn->prepare($query_insert);
+
+                    if($stmt2->execute(array(
+                        "id" => $id,
+                        "username" => $username,
+                        "relationship" => $relationship
+                    ))){
+                        return true;
+                    }else{
+                        throw new Exception ("Server Error!", 500);
+                    }
+                }else{
+                    throw new Exception ("Student doesn't exist!", 400);
+                }
+            }else{
+                throw new Exception ("Server Error!", 500);
+            }
+        }
+
         public function read_single($id){
             // Query to retrieve pupil information with parents and teachers
             $query = "

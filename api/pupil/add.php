@@ -40,6 +40,9 @@
     $pupil = new Pupil($db);
 
     try{
+        if($data->exist && $data->id){
+            
+        }
         // Sanitize and set data
         $pupil->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
         $pupil->set_sex(htmlspecialchars($data->sex));
