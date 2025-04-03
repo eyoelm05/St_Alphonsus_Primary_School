@@ -15,9 +15,9 @@ async function read_single() {
     const options = {
         method: "GET",
     };
-    const response = await fetch(`http://localhost/St_Alphonsus_Primary_School/api/pupil/read_parent.php?id=${id}`, options);
+    const response = await fetch(`http://localhost/St_Alphonsus_Primary_School/api/pupil/read_single.php?id=${id}`, options);
     const result = await response.json();
-    const pupil = result.pupils;
+    const pupil = result.pupil;
 
 
     pupil_id.textContent += `${pupil.id}`;
