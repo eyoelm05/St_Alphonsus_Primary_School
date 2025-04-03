@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St Alphonsus Primary school</title>
+</head>
+<body>
+    <h1>Add pupil</h1>
+    <form id="add_form">
+        <label for="exists">Is your child registered in the school by another parent?</label>
+        <select name="exists" id="exists">
+            <option value="None" disabled selected></option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+        <br><br>
+        <button type="submit" id="submit">Add</button>
+    </form>
+    <p id="response_message"></p>
+    <script src="assets/js/add_pupil.js"></script>
+</body>
+</html>

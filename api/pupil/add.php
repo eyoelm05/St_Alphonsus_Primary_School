@@ -41,7 +41,7 @@
 
     try{
         // Check if student is existing and id is set
-        if($data->exists && $data->id){
+        if($data->exists ?? null && $data->id ?? null){
             // Check if relationship exists
             if($data->relationship){
                 // Execute add_pupil
@@ -56,7 +56,7 @@
             } else{
                 throw new Exception ("Relationship can't be empty!", 400);
             }
-        }elseif($data->exist && !$data->id){
+        }elseif($data->exist ?? null && !$data->id ?? null){
             throw new Exception ("Please input id of the registered student!", 400);
         }else{
             // Sanitize and set data
@@ -92,7 +92,7 @@
             }
         }
     }catch(Exception $e){
-        http_response_code($e->get_code());
+        http_response_code($e->getCode());
         echo json_encode(array(
             "message" => $e->getMessage() 
         ));
