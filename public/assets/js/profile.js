@@ -1,6 +1,6 @@
 const profile_form = document.getElementById("profile_form");
-const response_message = document.getElementById('response_message')
-const submit_btn = document.getElementById("submit");
+const response_message = document.getElementById('response_message');
+const delete_btn = document.getElementById("delete");
 
 fetch_profile();
 
@@ -63,3 +63,29 @@ profile_form.addEventListener("submit", async (event) => {
         }
     }
 })
+
+
+delete_btn.addEventListener("click", async () => {
+    const confirmed = confirm("Are you sure you want to delete your account? This action cannot be undone.");
+
+    if (confirmed) {
+        const options = {
+            method: "DELETE",
+        };
+
+        const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/users/delete.php", options);
+        const result = await response.json();
+
+        response_message.innerHTML = result.message;
+
+        if(response.status == 200){
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        } else if (response.status == 401) {
+            window.location.href = '401_page.html';
+        } else if (response.status == 500) {
+            window.location.href = '500_page.html';
+        }
+    }
+});

@@ -20,7 +20,6 @@
     // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Users.php";
-    require_once __DIR__."/../../config/jwt.php";
     require_once __DIR__."/../../src/Controller/auth_controller.php";
     // End of my custom code.
 
