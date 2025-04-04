@@ -7,7 +7,7 @@
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Methods: PUT');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
     // End of external code.
 
@@ -53,7 +53,7 @@
                 $pupil->set_class_name(htmlspecialchars($data->class_name ?? null));
 
                 // Add medicals only if it exists
-                if($data->medicals){
+                if($data->medicals ?? null){
                     $medicals = [];
                     foreach($data->medicals as $medical_info){
                         array_push($medicals, htmlspecialchars($medical_info));
@@ -65,7 +65,8 @@
                 if($pupil->update($id)){
                     http_response_code(200);
                     echo json_encode(array(
-                        "message" => "Pupil updated successfully"
+                        "message" => "Pupil updated successfully!",
+                        "user_type" => $user->user_type
                     ));
                 }else{
                     throw new Exception ("Server Error!", 500);

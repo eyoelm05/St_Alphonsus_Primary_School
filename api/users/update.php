@@ -53,7 +53,7 @@
             http_response_code(200);
             echo json_encode(
                 array(
-                    "message" => "User updated successfully",
+                    "message" => "User updated successfully!",
                     "user_type" => $current_user->user_type
                 )
             );
