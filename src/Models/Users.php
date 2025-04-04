@@ -309,7 +309,8 @@
             $query = "SELECT username, first_name, middle_initial, last_name, email, phone_no, address, sex FROM users  WHERE username = :username";
             $stmt = $this->conn->prepare($query);
             if($stmt->execute(["username" =>  $username])){
-                return true;
+                $row = $stmt->fetch();
+                return $row;
             }else{
                 throw new Exception ("Server Error!", 500);
             }
