@@ -304,6 +304,17 @@
             }
         }
 
+        // Profile method
+        public function profile($username){
+            $query = "SELECT username, first_name, middle_initial, last_name, email, phone_no, address, sex FROM users  WHERE username = :username";
+            $stmt = $this->conn->prepare($query);
+            if($stmt->execute(["username" =>  $username])){
+                return true;
+            }else{
+                throw new Exception ("Server Error!", 500);
+            }
+        }
+
         // Update method
         public function update($username){
             $query = "UPDATE users SET first_name = :first_name, middle_initial = :middle_initial, last_name = :last_name, 
