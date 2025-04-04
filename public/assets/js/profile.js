@@ -18,7 +18,7 @@ async function fetch_profile() {
         }else if(response.status == 500){
             window.location.href = '500_page.html';
         }else{
-            document.getElementById("username").value = result.username = result.user.username;
+            document.getElementById("username").value = result.user.username;
             document.getElementById("first_name").value = result.user.first_name;
             document.getElementById("middle_initial").value = result.user.middle_initial;
             document.getElementById("last_name").value = result.user.last_name;

@@ -237,7 +237,9 @@
                 SELECT 
                 p.pupil_id as id,
                 c.class_name as class,
-                concat(p.first_name, ' ', IFNULL(p.middle_initial, ''),' ', p.last_name) as name,
+                p.first_name, 
+                p.middle_initial,
+                p.last_name,
                 p.address,
                 p.date_of_birth,
                 p.sex,

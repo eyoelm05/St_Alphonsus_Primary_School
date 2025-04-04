@@ -60,11 +60,11 @@
             throw new Exception ("Please input id of the registered student!", 400);
         }else{
             // Sanitize and set data
-            $pupil->set_name(htmlspecialchars($data->first_name),htmlspecialchars($data->middle_initial), htmlspecialchars($data->last_name));
-            $pupil->set_sex(htmlspecialchars($data->sex));
-            $pupil->set_address(htmlspecialchars($data->address));
-            $pupil->set_date_of_birth(htmlspecialchars($data->date_of_birth));
-            $pupil->set_class_name(htmlspecialchars($data->class_name));
+            $pupil->set_name(htmlspecialchars($data->first_name ?? null),htmlspecialchars($data->middle_initial ?? null), htmlspecialchars($data->last_name ?? null));
+            $pupil->set_sex(htmlspecialchars($data->sex ??null));
+            $pupil->set_address(htmlspecialchars($data->address ?? null));
+            $pupil->set_date_of_birth(htmlspecialchars($data->date_of_birth ?? null));
+            $pupil->set_class_name(htmlspecialchars($data->class_name ?? null));
 
             // add medicals only if it exists
             if($data->medicals){
@@ -77,7 +77,7 @@
             }
 
             // Check if relationship exists
-            if($data->relationship){
+            if($data->relationship ?? null){
                 // Execute add_pupil
                 if($pupil->add_pupil($user->username, htmlspecialchars($data->relationship))){
                     http_response_code(200);
@@ -92,6 +92,7 @@
             }
         }
     }catch(Exception $e){
+        $message = $e->getMessage();
         http_response_code($e->getCode());
         echo json_encode(array(
             "message" => $e->getMessage() 

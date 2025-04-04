@@ -7,6 +7,7 @@ const sex = document.getElementById("sex");
 const address = document.getElementById("address");
 const class_name = document.getElementById("class")
 const class_teacher = document.getElementById("class_teacher");
+const update_pupil = document.getElementById("update_pupil");
 
 async function read_single() {
     const params = new URLSearchParams(window.location.search);
@@ -21,7 +22,7 @@ async function read_single() {
 
 
     pupil_id.textContent += `${pupil.id}`;
-    name.textContent += pupil.name;
+    name.textContent += `${pupil.first_name} ${pupil.middle_initial} ${pupil.last_name}`;
     parents.textContent += pupil.parents;
     date_of_birth.textContent += pupil.date_of_birth;
     sex.textContent += pupil.sex;
@@ -40,6 +41,8 @@ async function read_single() {
         medicals.textContent = `Medicals: ${pupil.medicals}`;
         container.appendChild(medicals)
     }
+
+    update_pupil.href = `update_pupil.html?id=${id}`
 }
 
 read_single();
