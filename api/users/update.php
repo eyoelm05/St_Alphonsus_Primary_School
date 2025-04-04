@@ -7,7 +7,7 @@
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Methods: PUT');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
     // End of external code.
 
@@ -19,7 +19,6 @@
     // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Users.php";
-    require_once __DIR__."/../../config/jwt.php";
     require_once __DIR__."/../../src/Controller/auth_controller.php";
     // End of my custom code.
 
@@ -39,14 +38,7 @@
 
     try{
         //Instantiate a new user object.
-        //Checks user_type instantiate the correct user object.
-        if($data->user_type == "parent"){
-                $user = new User($db);
-        }elseif($data->user_type == "employee"){
-            $user=new Employee_User($db);
-        }else{
-            throw new Exception ("User type can only take values parent or employee!", 400);
-        }
+        $user = new User($db);
 
         //Sanitize data 
         $user->set_username(htmlspecialchars($data->username ?? null));
@@ -55,13 +47,14 @@
         $user->set_email(htmlspecialchars($data->email ?? null));
         $user->set_address(htmlspecialchars($data->address ?? null));
         $user->set_sex(htmlspecialchars($data->sex ?? null));
-        
+
         // Call the update function
         if($user->update($current_user->username)){
             http_response_code(200);
             echo json_encode(
                 array(
-                    "message" => "User updated successfully"
+                    "message" => "User updated successfully",
+                    "user_type" => $current_user->user_type
                 )
             );
         }else{

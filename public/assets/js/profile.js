@@ -2,15 +2,6 @@ const profile_form = document.getElementById("profile_form");
 const response_message = document.getElementById('response_message')
 const submit_btn = document.getElementById("submit");
 
-const username = document.getElementById("username").value;
-const first_name = document.getElementById("first_name").value;
-const middle_initial = document.getElementById("middle_initial").value;
-const last_name = document.getElementById("last_name").value;
-const email = document.getElementById("email").value;
-const phone_no = document.getElementById("phone_no").value;
-const address = document.getElementById("address").value;
-const sex = document.getElementById("sex").value;
-
 fetch_profile();
 
 async function fetch_profile() {
@@ -29,7 +20,7 @@ async function fetch_profile() {
         }else{
             document.getElementById("username").value = result.username = result.user.username;
             document.getElementById("first_name").value = result.user.first_name;
-            document.getElementById("middle_initial").value = result.user.last_name;
+            document.getElementById("middle_initial").value = result.user.middle_initial;
             document.getElementById("last_name").value = result.user.last_name;
             document.getElementById("email").value = result.user.email;
             document.getElementById("phone_no").value = result.user.phone_no;
@@ -37,3 +28,38 @@ async function fetch_profile() {
             document.getElementById("sex").value = result.user.sex
         }
 }
+
+profile_form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const username = document.getElementById("username").value;
+    const first_name = document.getElementById("first_name").value;
+    const middle_initial = document.getElementById("middle_initial").value;
+    const last_name = document.getElementById("last_name").value;
+    const email = document.getElementById("email").value;
+    const phone_no = document.getElementById("phone_no").value;
+    const address = document.getElementById("address").value;
+    const sex = document.getElementById("sex").value;
+
+    const data = {username, first_name, middle_initial, last_name, email, phone_no, address, sex};
+
+    const options = {
+        method: "PUT",
+        body: JSON.stringify(data),
+    };
+
+    const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/users/update.php", options);
+    const result = await response.json();
+    response_message.innerHTML = result.message;
+
+    if(response.status == 200){
+        if(result.user_type === "parent"){
+            setTimeout(() => {
+                window.location.href = 'read_parent.html';
+            }, 2000)
+        }else{
+            setTimeout(() => {
+                window.location.href = 'read_teacher.html';
+            }, 2000); 
+        }
+    }
+})
