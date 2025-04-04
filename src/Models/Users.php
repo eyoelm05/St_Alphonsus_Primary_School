@@ -95,7 +95,7 @@
             }
 
             // Check if email is valid using regular expression
-            if(!preg_match('/^[a-zA-Z0-9_]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,}$/',$email)){
+            if(!preg_match('/^[a-zA-Z0-9_.]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,}$/',$email)){
                 throw new Exception("Invalid Email! Please enter a proper email such as: josh123@example.com.", 400);
             }
 
