@@ -55,18 +55,7 @@
         $user->set_email(htmlspecialchars($data->email ?? null));
         $user->set_address(htmlspecialchars($data->address ?? null));
         $user->set_sex(htmlspecialchars($data->sex ?? null));
-        $user->set_password(htmlspecialchars($data->password ?? null));
-
-        if($data->user_type == "employee"){
-            $user->set_background_check(htmlspecialchars($data->background_check ?? null));
-            $user->set_date_of_birth(htmlspecialchars($data->date_of_birth ?? null));
-            $user->set_start_date(htmlspecialchars($data->start_date ?? null));
-        }
-
-        if($data->employee_type == "TA"){
-            $user->set_class_name(htmlspecialchars($data->class_name ?? null));
-        }
-
+        
         // Call the update function
         if($user->update($current_user->username)){
             http_response_code(200);
