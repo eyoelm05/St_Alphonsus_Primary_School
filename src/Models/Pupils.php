@@ -245,7 +245,7 @@
                 p.sex,
                 concat(pt.first_name, ' ',IFNULL(pt.middle_initial, ''),' ', pt.last_name) as teacher_name,
                 GROUP_CONCAT(DISTINCT concat(ppu.first_name,' ',IFNULL(ppu.middle_initial, ''), ' ' , ppu.last_name, ' ', pp.relationship) SEPARATOR '\n') as parents,
-                IFNULL(GROUP_CONCAT(DISTINCT pta.username SEPARATOR ', '), '') as teacher_assistants,
+                IFNULL(GROUP_CONCAT(DISTINCT concat(tau.first_name,' ',IFNULL(tau.middle_initial, ''), ' ' , tau.last_name) SEPARATOR ', '), '') as teacher_assistants,
                 IFNULL(GROUP_CONCAT(DISTINCT pm.medical_info SEPARATOR ', '), '') as medicals
                 FROM pupils p
                 LEFT JOIN pupil_parent pp ON p.pupil_id = pp.pupil_id
@@ -254,6 +254,7 @@
                 LEFT JOIN users pt ON teacher.username = pt.username
                 LEFT JOIN users ppu ON pp.username = ppu.username
                 LEFT JOIN teacher_assistant pta ON p.class_name = pta.class_name
+                LEFT JOIN users tau ON pta.username = tau.username 
                 LEFT JOIN pupil_medicals pm ON p.pupil_id = pm.pupil_id
                 WHERE p.pupil_id = :id
             ";
