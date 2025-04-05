@@ -92,10 +92,17 @@
             }
         }
     }catch(Exception $e){
-        $message = $e->getMessage();
-        http_response_code($e->getCode());
-        echo json_encode(array(
-            "message" => $e->getMessage() 
-        ));
+        if(str_contains($e->getMessage(), "SQLSTATE[45000]")){
+            $message = explode("1644", $e->getMessage());
+            http_response_code(400);
+            echo json_encode(array(
+                "message" => $message[1]
+            ));
+        }else{
+            http_response_code($e->getCode());
+            echo json_encode(array(
+                "message" => $e->getMessage() 
+            ));
+        }
     }
 ?>
