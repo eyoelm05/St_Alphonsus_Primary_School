@@ -24,7 +24,21 @@
         // Check if user type is employee
         if($users->user_type != "employee"){
             http_response_code(401);
-            echo json_encode(["message" => "Access Denied: Employee's only"]);
+            echo json_encode(["message" => "Access Denied: Employees only"]);
+            exit();
+        }
+
+        return $users;
+    }
+
+    function authorize_admin(){
+        // Call authenticate function
+        $users = authenticate();
+
+        // Check if user type is employee
+        if($users->employee_type != "A"){
+            http_response_code(401);
+            echo json_encode(["message" => "Access Denied: Admins only"]);
             exit();
         }
 
