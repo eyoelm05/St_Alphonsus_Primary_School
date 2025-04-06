@@ -30,11 +30,11 @@
     $admin = new Admin($db);
 
     try{
-        $data = $admin->not_approved();
+        $data = $admin->all_classes();
 
         http_response_code(200);
         echo json_encode(array(
-            "employees" => $data
+            "classes" => $data
         ));
         
     }catch(Exception $e){
