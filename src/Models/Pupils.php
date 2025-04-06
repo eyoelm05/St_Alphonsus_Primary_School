@@ -296,29 +296,6 @@
             }
         }
 
-        public function read_class($class_name){
-            // Query to get pupils in a single class
-            $query = "
-                SELECT
-                p.pupil_id as id,
-                concat(p.first_name, ' ', IFNULL(p.middle_initial, ''),' ', p.last_name) as name,
-                p.class_name as current_class
-                FROM pupils p
-                WHERE p.class_name = :class_name
-            ";
-
-            $stmt = $this->conn->prepare($query);
-
-            if($stmt->execute(array(
-                "class_name" => $class_name
-            ))){
-                $pupils = $stmt->fetchAll();
-                return $pupils;
-            }else{
-                throw new Exception ("Server Error!", 500);
-            }
-        }
-
         public function update($id){
             // Query to update user details
             $query = "UPDATE pupils SET first_name = :first_name, middle_initial = :middle_initial, last_name = :last_name, 

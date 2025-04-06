@@ -14,6 +14,7 @@
     // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Pupils.php";
+    require_once __DIR__."/../../src/Models/Class.php";
     require_once __DIR__."/../../src/Middleware/auth_middleware.php";
 
     // Protect route
@@ -28,6 +29,7 @@
 
     //Instantiate a new pupil
     $pupil = new Pupil($db);
+    $class = new Classes($db);
 
     try{
         // Get class name for $_GET super global variable
@@ -35,9 +37,10 @@
         if(isset($_GET["class_name"])){
             // Read pupil in a single class
             $class_name = $_GET["class_name"];
-            $data = $pupil->read_class($class_name);
+            $data = $class->read_class($class_name);
         }else{
-            throw new Exception("You must enter a class", 400);
+            $class_name = $class->class_teacher($user->username, $user->employee_type);
+            $data = $class->read_class($class_name["class_name"]);
         }
 
         http_response_code(200);

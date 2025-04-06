@@ -14,6 +14,7 @@
     // Import required files.
     require_once __DIR__."/../../config/Database.php";
     require_once __DIR__."/../../src/Models/Admins.php";
+    require_once __DIR__."/../../src/Models/Class.php";
     require_once __DIR__."/../../src/Middleware/auth_middleware.php";
 
     // Protect route
@@ -29,8 +30,10 @@
     // My Custom Code
     $admin = new Admin($db);
 
+    $class = new Classes($db);
+
     try{
-        $data = $admin->all_classes();
+        $data = $class->all_classes();
 
         http_response_code(200);
         echo json_encode(array(

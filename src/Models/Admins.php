@@ -25,22 +25,6 @@
             }
         }
 
-        public function all_classes(){
-            $query = "SELECT c.class_name, c.class_capacity, 
-                    concat(tu.first_name, ' ', IFNULL(tu.middle_initial, ''),' ', tu.last_name) as name  
-                    FROM classes c
-                    LEFT JOIN users tu ON c.teacher = tu.username";
-            
-            $stmt = $this->conn->prepare($query);
-
-            if($stmt->execute()){
-                $classes = $stmt->fetchAll();
-                return $classes;
-            }else{
-                throw new Exception ("Server Error!", 500);
-            }
-        }
-
         public function approve($user){
             // First register to employee table 
             if($user->register()){
