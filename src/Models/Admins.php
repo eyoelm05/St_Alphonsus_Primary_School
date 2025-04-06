@@ -23,5 +23,9 @@
                 throw new Exception ("Server Error!", 500);
             }
         }
+
+        public function approve(){
+            
+        }
     }
 ?>
