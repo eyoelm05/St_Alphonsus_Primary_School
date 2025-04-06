@@ -6,6 +6,7 @@
             parent::__construct($db);
         }
 
+        // Get users that haven't been approved
         public function not_approved(){
             $query = "SELECT username, 
                 concat(first_name, ' ', IFNULL(middle_initial, ''),' ', last_name) as name
@@ -24,8 +25,18 @@
             }
         }
 
-        public function approve(){
-            
+        public function approve($user){
+            // First register to employee table 
+            if($user->register()){
+                // After that register employees based on there role
+                if($user->employee_type === "T"){
+                    $user->register_teacher();
+                    return true;
+                }elseif($user->employee_type === "TA"){
+                    $user->register_Ta();
+                    return true;
+                }
+            }
         }
     }
 ?>

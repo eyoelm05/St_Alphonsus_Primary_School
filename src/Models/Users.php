@@ -503,7 +503,7 @@
         }
 
         // Register method for teacher assistants 
-        public function register_TA(){
+        protected function register_TA(){
             $query = "INSERT INTO teacher_assistant (username, class_name) VALUES (:username, :class_name)";
 
             $stmt = $this->conn->prepare($query);
