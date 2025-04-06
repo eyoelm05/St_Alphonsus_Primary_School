@@ -35,7 +35,7 @@
         // Call authenticate function
         $users = authenticate();
 
-        // Check if user type is employee
+        // Check if user type is admin
         if($users->employee_type != "A"){
             http_response_code(401);
             echo json_encode(["message" => "Access Denied: Admins only"]);
