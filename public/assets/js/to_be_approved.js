@@ -17,7 +17,7 @@ async function to_be_approved() {
     }else{
         result.employees.forEach(employee => {
             const employee_container = document.createElement('div');
-            employee_container.username = employee.id;
+            employee_container.username = employee.username;
             employee_container.className = "employee_container";
 
             employee_container.innerHTML = `<hr><p>${employee.username}</p><p>${employee.name}</p><hr>`
@@ -25,8 +25,8 @@ async function to_be_approved() {
 
             employee_container.addEventListener("click", () => {
                 const params = new URLSearchParams();
-                params.append("id", employee_container.id);
-                location.href = "read_single.html?" + params.toString();
+                params.append("username", employee_container.username);
+                location.href = "approve.html?" + params.toString();
             })
         });
     }

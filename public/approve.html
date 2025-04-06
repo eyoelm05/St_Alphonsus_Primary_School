@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St Alphonsus Primary school</title>
+</head>
+<body>
+    <form id="approve_form">
+        <h1 id="Header">Approve Employee</h1>
+        <label for="background_check">Background Check: </label>
+        <input type="checkbox" name="background_check" id="background_check" required>
+        <br><br>
+        <label for="date_of_birth">Date of Birth: </label>
+        <input type="date" name="date_of_birth" id="date_of_birth" required>
+        <br><br>
+        <label for="employee_type">Employee Type: </label>
+        <select name="employee_type" id="employee_type" required>
+            <option value="T">Teacher</option>
+            <option value="TA">Teacher Assistant</option>
+        </select>
+        <br><br>
+        <label for="start_date">Start Date: </label>
+        <input type="date" name="start_date" id="start_date" required>
+        <br><br>
+        <label for="class_name">Class: </label>
+        <select name="class_name" id="class_name" required>
+            <option value="Reception Year">Reception Year</option>
+            <option value="Year 1">Year 1</option>
+            <option value="Year 2">Year 2</option>
+            <option value="Year 3">Year 3</option>
+            <option value="Year 4">Year 4</option>
+            <option value="Year 5">Year 5</option>
+            <option value="Year 6">Year 6</option>
+        </select>
+        <br><br>
+        <button type="submit" id="submit">Approve</button>
+    </form>
+    <p id="response_message"></p>
+    <script src="assets/js/approve.js"></script>
+</body>
+</html>
