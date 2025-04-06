@@ -1,0 +1,118 @@
+:root {
+    --primary-blue: #003C78;
+    --light-blue: #e8f0f7;
+    --error-red: #dc3545;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--light-blue);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#profile_form {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+h1 {
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2.2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+input, select {
+    width: 95%;
+    padding: 0.875rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 5px rgba(0, 60, 120, 0.2);
+}
+
+button {
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+#submit{
+    background-color: var(--primary-blue);
+}
+
+#delete {
+    background-color: var(--error-red);
+    margin-top: 0.5rem;
+}
+
+
+button:hover {
+    transform: scale(1.1);
+}
+
+#response_message {
+    text-align: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+    color: white;
+}
+
+#response_message.success{
+    background-color: var(--success-green);
+}
+
+#response_message.error {
+    background-color: var(--error-red);
+}
+
+
+@media (max-width: 600px) {
+    #profile_form {
+        padding: 1.5rem;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+
+    input, button {
+        padding: 0.75rem;
+    }
+}
