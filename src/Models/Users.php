@@ -130,9 +130,16 @@
         }
 
         public function set_user_type($user_type){
-            // Validation is not required here.
-            // It has already been performed in the register endpoint.
-            $this->user_type = trim($user_type);
+            $user_type = trim($user_type);
+            if(empty($user_type)){
+                throw new Exception ("User type can't be empty!", 400);
+            }
+
+            // Validate user type
+            if($user_type != "parent" && $user_type != "employee"){
+                throw new Exception ("User type can't be anything other than employee or parent!", 400);
+            }
+            $this->user_type = $user_type;
         }
         
         // This code is a modified version of the password verification we learned in class.
@@ -432,7 +439,8 @@
                 throw new Exception ("Employee type can't be empty!", 400);
             }
 
-            // Make sure employee type is T or TA
+            // Make sure employee type is T or TA.
+            // Admin registration is manual that's why it's not included.
             if($employee_type !== "T" && $employee_type !== "TA"){
                 throw new Exception ("Please enter proper employee type! (T for teacher or TA for teacher assistant)", 400);
             }

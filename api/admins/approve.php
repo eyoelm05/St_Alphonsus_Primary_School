@@ -32,9 +32,14 @@
     // End of external code.
 
     // My Custom Code
+    $user = new Employee_User($db);
     $admin = new Admin($db);
     try{
-        
+        $user->set_background_check(htmlspecialchars($data->background_check ?? null));
+        $user->set_date_of_birth(htmlspecialchars($data->date_of_birth ?? null));
+        $user->set_start_date(htmlspecialchars($data->start_date ?? null));
+        $user->set_employee_type(htmlspecialchars($data->employee_type ?? null));
+        $user->set_class_name(htmlspecialchars($data->class_name ?? null));
     }catch(Exception $e){
         http_response_code($e->getCode());
         echo json_encode(array(
