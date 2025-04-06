@@ -22,7 +22,7 @@
         $users = authenticate();
 
         // Check if user type is employee
-        if($users->user_type != "employee"){
+        if($users->user_type != "employee" && $user->employee_type){
             http_response_code(401);
             echo json_encode(["message" => "Access Denied: Employees only"]);
             exit();

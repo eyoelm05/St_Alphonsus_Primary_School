@@ -28,9 +28,15 @@ login_form.addEventListener('submit', async function (event) {
                 window.location.href = 'to_be_approved.html';
             }, 2000); 
         }else{
-            setTimeout(() => {
-                window.location.href = 'read_teacher.html';
-            }, 2000); 
+            if(result.employee_type){
+                setTimeout(() => {
+                    window.location.href = 'read_teacher.html';
+                }, 2000); 
+            }else{
+                setTimeout(() => {
+                    window.location.href = 'wait_approval.html';
+                }, 2000); 
+            }
         }
     }
 });

@@ -299,7 +299,11 @@
                     ]);
 
                     $row2 = $stmt2->fetch();
-                    $row += $row2; // Concatenate the two results.
+
+                    // This adds employee_type only if the user is approved
+                    if($row2){
+                        $row += $row2; // Concatenate the two results.
+                    }
                 }
                 
                 // Take out password hash from the array.
