@@ -22,42 +22,57 @@
             if(empty($username)){
                 throw new Exception ("Teacher can't be empty");
             }
-            $query1 = "SELECT teacher FROM classes WHERE class_name = :class_name";
-            $stmt1 = $this->conn->prepare($query1);
 
-            if($stmt1->execute(["class_name" => $class_name])){
-                $data = $stmt1->fetch();
-                if($data["teacher"] === $username){
-                    $this->teacher = $username;
-                    return true;
+            $teachers = $this->available_teachers($class_name);
+
+            if($teachers){
+                foreach($teachers as $teacher){
+                    if($teacher["username"] === $username){
+                        $this->teacher = $username;
+                        return true;
+                    }
                 }
-            }else{
-                throw new Exception ("Server Error!", 500);
             }
 
+            throw new Exception ("Teacher not registered or have already been assigned to a class", 400);
+        }
+
+        public function available_teachers($class_name){
             // Query to check if teacher is registered and not assigned to a class
-            $query = "SELECT username FROM teacher t 
-                    WHERE t.username = :username
-                    && NOT EXISTS (
+            $query = "SELECT 
+                    t.username,
+                    concat(tu.first_name, ' ', IFNULL(tu.middle_initial, ''),' ', tu.last_name) as teacher_name 
+                    FROM teacher t 
+                    LEFT JOIN users tu ON t.username = tu.username
+                    WHERE NOT EXISTS (
                         SELECT 1 
                         FROM classes c
                         WHERE c.teacher = t.username
                     )";
 
             $stmt = $this->conn->prepare($query);
-            if($stmt->execute(["username" => $username])){
+            if($stmt->execute()){
                 $available_teachers = $stmt->fetchAll();
-
-                foreach($available_teachers as $teacher){
-                    if($username === $teacher["username"]){
-                        $this->teacher = $username;
-                        return true;
-                    }
-                }
-                throw new Exception ("Teacher not registered or have already been assigned to a class", 400);
             }else{
                 throw new Exception ("Server Error!", 500);
             }
+
+            $query1 = "SELECT 
+                    c.teacher as username, 
+                    concat(tu.first_name, ' ', IFNULL(tu.middle_initial, ''),' ', tu.last_name) as teacher_name 
+                    FROM classes c 
+                    LEFT JOIN users tu ON c.teacher = tu.username
+                    WHERE c.class_name = :class_name";
+            $stmt1 = $this->conn->prepare($query1);
+
+            if($stmt1->execute(["class_name" => $class_name])){
+                $current_teacher = $stmt1->fetch();
+                $available_teachers[] = $current_teacher;
+            }else{
+                throw new Exception ("Server Error!", 500);
+            }
+
+            return $available_teachers;
         }
 
         public function all_classes(){

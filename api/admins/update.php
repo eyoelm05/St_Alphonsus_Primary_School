@@ -47,14 +47,14 @@
             throw new Exception("Class name must be set!", 400);
         }
 
-        if($class->update($_GET["class_name"])){
+        if($class->update($class_name)){
             http_response_code(200);
             echo json_encode(array(
                 "message" => "Class updated!"
             ));
         }
     }catch(Exception $e){
-       // http_response_code($e->getCode());
+        //http_response_code($e->getCode());
         echo json_encode(array(
             "message" => $e->getMessage() 
         ));

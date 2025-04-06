@@ -24,6 +24,8 @@ async function read_classes() {
             <h4>${elem.class_capacity}</h4>
             <h4>${elem.teacher_name}</h4>
             <a href="read_teacher.html?class_name=${elem.class_name}">Show students</a>
+            <br>
+            <a href="update_class.html?class_name=${elem.class_name}">Update Class</a>
             `
             container.appendChild(class_container);
         });

@@ -34,13 +34,15 @@
         if(isset($_GET["class_name"])){
             // read single class
             $data = $class->read_single_class($_GET["class_name"]);
+            $available_teachers = $class->available_teachers($_GET["class_name"]);
         }else{
             throw new Exception ("Class name must be set!", 400);
         }
 
         http_response_code(200);
         echo json_encode(array(
-            "class" => $data
+            "class" => $data,
+            "teachers" => $available_teachers
         ));
         
     }catch(Exception $e){
