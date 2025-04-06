@@ -1,5 +1,10 @@
 <?php
     Class Classes {
+        // Properties of a class
+        private $class_capacity;
+        private $teacher;
+        private $teacher_assistants;
+
         // Construct function connect to the database
         public function __construct($db){
             $this->conn = $db;
@@ -73,5 +78,25 @@
                 throw new Exception ("Server Error!", 500);
             }
         }
+
+        public function read_single_class($class_name){
+            $query = "SELECT c.class_name, c.class_capacity, 
+                    concat(tu.first_name, ' ', IFNULL(tu.middle_initial, ''),' ', tu.last_name) as teacher_name  
+                    FROM classes c
+                    LEFT JOIN users tu ON c.teacher = tu.username
+                    WHERE c.class_name = :class_name";
+
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute(array(
+                "class_name" => $class_name
+            ))){
+                $class = $stmt->fetch();
+                return $class;
+            }else{
+                throw new Exception ("Server Error!", 500);
+        }
+        }
+
     }
 ?>
