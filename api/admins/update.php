@@ -7,14 +7,18 @@
     // Adapted from Traversy, B. (2019) 'PHP REST API - MyBlog'
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Methods: PUT');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
     // End of external code.
+
+    // My Custom Code 
+    // Header to be able to set cookies. Details explained in users/login.php
+    header("Access-Control-Allow-Credentials: true");
 
     // My custom code.
     // Import required files.
     require_once __DIR__."/../../config/Database.php";
-    require_once __DIR__."/../../src/Models/Admins.php";
+    require_once __DIR__."/../../src/Models/Class.php";
     require_once __DIR__."/../../src/Middleware/auth_middleware.php";
 
     // Protect route
@@ -32,33 +36,28 @@
     // End of external code.
 
     // My Custom Code
-    $user = new Employee_User($db);
-    $admin = new Admin($db);
-    try{
-        if(isset($_GET["username"])){
-            $user->set_username(htmlspecialchars($_GET["username"]));
-            $user->set_background_check(htmlspecialchars($data->background_check ?? null));
-            $user->set_date_of_birth(htmlspecialchars($data->date_of_birth ?? null));
-            $user->set_start_date(htmlspecialchars($data->start_date ?? null));
-            $user->set_employee_type(htmlspecialchars($data->employee_type ?? null));
-            $user->set_class_name(htmlspecialchars($data->class_name ?? null));
+    $class = new Classes($db);
 
-            if($admin->approve($user)){
-                http_response_code(200);
-                echo json_encode(array(
-                    "message" => "Employee approved!"
-                ));
-            }else{
-                throw new Exception ("Server Error!", 500);
-            }
+    try{
+        if(isset($_GET["class_name"])){
+            $class_name = htmlspecialchars($_GET["class_name"]);
+            $class->set_class_capacity(htmlspecialchars($data->class_capacity ?? null));
+            $class->set_teacher(htmlspecialchars($data->teacher ?? null), $class_name);
         }else{
-            throw new Exception("Username must be set!", 400);
+            throw new Exception("Class name must be set!", 400);
         }
 
+        if($class->update($_GET["class_name"])){
+            http_response_code(200);
+            echo json_encode(array(
+                "message" => "Class updated!"
+            ));
+        }
     }catch(Exception $e){
-        http_response_code($e->getCode());
+       // http_response_code($e->getCode());
         echo json_encode(array(
             "message" => $e->getMessage() 
         ));
     }
+
 ?>

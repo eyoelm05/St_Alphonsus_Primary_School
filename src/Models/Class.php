@@ -3,11 +3,61 @@
         // Properties of a class
         private $class_capacity;
         private $teacher;
-        private $teacher_assistants;
 
         // Construct function connect to the database
         public function __construct($db){
             $this->conn = $db;
+        }
+
+        // Setter functions
+        public function set_class_capacity($class_capacity){
+            if(empty($class_capacity) && !ctype_number($class_capacity)){
+                throw new Exception ("Class capacity can't be empty and must be a number", 400);
+            }
+
+            $this->class_capacity = $class_capacity;
+        }
+
+        public function set_teacher($username, $class_name){
+            if(empty($username)){
+                throw new Exception ("Teacher can't be empty");
+            }
+            $query1 = "SELECT teacher FROM classes WHERE class_name = :class_name";
+            $stmt1 = $this->conn->prepare($query1);
+
+            if($stmt1->execute(["class_name" => $class_name])){
+                $data = $stmt1->fetch();
+                if($data["teacher"] === $username){
+                    $this->teacher = $username;
+                    return true;
+                }
+            }else{
+                throw new Exception ("Server Error!", 500);
+            }
+
+            // Query to check if teacher is registered and not assigned to a class
+            $query = "SELECT username FROM teacher t 
+                    WHERE t.username = :username
+                    && NOT EXISTS (
+                        SELECT 1 
+                        FROM classes c
+                        WHERE c.teacher = t.username
+                    )";
+
+            $stmt = $this->conn->prepare($query);
+            if($stmt->execute(["username" => $username])){
+                $available_teachers = $stmt->fetchAll();
+
+                foreach($available_teachers as $teacher){
+                    if($username === $teacher["username"]){
+                        $this->teacher = $username;
+                        return true;
+                    }
+                }
+                throw new Exception ("Teacher not registered or have already been assigned to a class", 400);
+            }else{
+                throw new Exception ("Server Error!", 500);
+            }
         }
 
         public function all_classes(){
@@ -51,7 +101,7 @@
                     throw new Exception ("Server Error!", 500);
                 }
             }else{
-                throw new Exception ("Admins must have class name to access a class");
+                throw new Exception ("Admins must have class name to access a class", 400);
             }
         }
 
@@ -95,7 +145,24 @@
                 return $class;
             }else{
                 throw new Exception ("Server Error!", 500);
+            }
         }
+
+        public function update($class_name){
+            $query = "UPDATE classes SET class_capacity = :class_capacity, teacher = :teacher
+            WHERE class_name = :class_name";
+
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute(array(
+                "class_capacity" => $this->class_capacity,
+                "teacher" => $this->teacher,
+                "class_name" => $class_name
+            ))){
+                return true;
+            }else{
+                throw new Exception ("Server Error!", 500);
+            }
         }
 
     }
