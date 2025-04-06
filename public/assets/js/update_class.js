@@ -65,8 +65,11 @@ update_class_form.addEventListener("submit", async (event) => {
     response_message.innerHTML = result.message;
 
     if(response.status == 200){
+        response_message.className = "success"
         setTimeout(() => {
             window.location.href = 'all_classes.html';
         }, 2000)
+    }else{
+        response_message.className = "error"
     }
 })

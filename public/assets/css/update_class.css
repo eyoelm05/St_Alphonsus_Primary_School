@@ -17,21 +17,20 @@ body {
     justify-content: center;
 }
 
-#login_form {
+#update_class_form {
     background-color: white;
-    padding: 2.5rem;
+    padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
-    margin: 20px auto;
+    max-width: 500px;
 }
 
 h1 {
     color: var(--primary-blue);
     text-align: center;
-    margin-bottom: 2.5rem;
-    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    font-size: 2rem;
 }
 
 label {
@@ -41,17 +40,17 @@ label {
     font-weight: 600;
 }
 
-input {
+input, select {
     width: 95%;
-    padding: 0.875rem;
-    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
     border: 2px solid #e0e0e0;
     border-radius: 5px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
 }
 
-input:focus {
+input:focus, select:focus {
     outline: none;
     border-color: var(--primary-blue);
     box-shadow: 0 0 5px rgba(0, 60, 120, 0.2);
@@ -67,7 +66,6 @@ button {
     font-size: 1.1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 1rem;
 }
 
 button:hover {
@@ -79,12 +77,10 @@ button:hover {
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 5px;
-    width: 100%;
-    max-width: 400px;
     color: white;
 }
 
-#response_message.success{
+#response_message.success {
     background-color: var(--success-green);
 }
 
@@ -94,17 +90,16 @@ button:hover {
 
 
 @media (max-width: 600px) {
-    #login_form {
+    #update_class_form {
         padding: 1.5rem;
         margin: 10px;
     }
 
     h1 {
         font-size: 1.75rem;
-        margin-bottom: 2rem;
     }
 
-    input, button {
-        padding: 0.75rem;
+    input, select, button {
+        padding: 0.6rem;
     }
 }
