@@ -1,10 +1,18 @@
 const container = document.getElementById("container");
 
 async function read_teacher() {
+    const params = new URLSearchParams(window.location.search);
+    const class_name = params.get("class_name");
+    let url;
     const options = {
         method: "GET",
     };
-    const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/pupil/read_teacher.php", options);
+    if(class_name){
+        url = `http://localhost/St_Alphonsus_Primary_School/api/pupil/read_teacher.php?class_name=${class_name}`
+    }else{
+        url = `http://localhost/St_Alphonsus_Primary_School/api/pupil/read_teacher.php`
+    }
+    const response = await fetch(url, options);
     const result = await response.json();
 
     if(response.status == 404){
