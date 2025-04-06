@@ -1,6 +1,8 @@
 :root {
     --primary-blue: #003C78;
     --light-blue: #e8f0f7;
+    --error-red: #dc3545;
+    --success-green: #28a745;
 }
 
 body {
@@ -74,8 +76,22 @@ button:hover {
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 5px;
-    color: #000;
+    color: white;
 }
+
+#response_message:empty {
+    display: none;
+}
+
+#response_message:not(:empty) {
+    background-color: var(--success-green);
+}
+
+#response_message.error {
+    background-color: var(--error-red);
+}
+
+
 
 
 @media (max-width: 600px) {

@@ -36,5 +36,7 @@ register_form.addEventListener("submit", async (event)=>{
         setTimeout(() => {
             window.location.href = 'sign_in.html';
         }, 2000); 
+    }else{
+        response_message.className = "error"
     }
 })
