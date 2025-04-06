@@ -385,6 +385,7 @@
         protected $date_of_birth;
         protected $employee_type;
         protected $start_date;
+        protected $class_name;
 
         public function __construct($db){
             parent::__construct($db);
@@ -439,29 +440,73 @@
             $this->employee_type = $employee_type;
         }
 
-        // Register method
-        public function register(){
-
-            // First register user
-            if(parent::register()){
-                $query = "INSERT INTO employee (username, background_check, date_of_birth, employee_type, start_date)
-                             VALUES (:username, :background_check, :date_of_birth, :employee_type, :start_date)";
-
-                $stmt = $this->conn->prepare($query);
-
-                if($stmt->execute([
-                    "username" => $this->username,
-                    "background_check" => $this->background_check,
-                    "date_of_birth" => $this->date_of_birth,
-                    "employee_type" => $this->employee_type,
-                    "start_date" => $this->start_date
-                ])){
-                    return true;
-                }
-                return false;
+        // Setter for class_name
+        public function set_class_name($class_name){
+            if(empty($class_name)){
+                throw new Exception ("Class name can't be empty", 400);
             }
 
-            return false;
+            // Validate class_name
+            if($class_name != "Reception Year" && 
+            $class_name != "Year 1" && 
+            $class_name != "Year 2" &&
+            $class_name != "Year 3" &&
+            $class_name != "Year 4" &&
+            $class_name != "Year 5" &&
+            $class_name != "Year 6"
+            ){
+                throw new Exception ("Enter proper class please!", 400);
+            }
+            
+            $this->class_name = $class_name;
+        }
+
+        // Register method
+        public function register(){
+            $query = "INSERT INTO employee (username, background_check, date_of_birth, employee_type, start_date)
+                            VALUES (:username, :background_check, :date_of_birth, :employee_type, :start_date)";
+
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute([
+                "username" => $this->username,
+                "background_check" => $this->background_check,
+                "date_of_birth" => $this->date_of_birth,
+                "employee_type" => $this->employee_type,
+                "start_date" => $this->start_date
+            ])){
+                return true;
+            }
+            throw new Exception ("Server Error!", 500);
+        }
+
+        // Register method for teachers
+        protected function register_teacher(){
+            $query = "INSERT INTO teacher (username) VALUES (:username)";
+
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute([
+                "username" => $this->username
+            ])){
+                return true;
+            }
+            throw new Exception ("Server Error!", 500);
+        }
+
+        // Register method for teacher assistants 
+        public function register_TA(){
+            $query = "INSERT INTO teacher_assistant (username, class_name) VALUES (:username, :class_name)";
+
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute([
+                "username" => $this->username,
+                "class_name" => $this->class_name
+            ])){
+                return true;
+            }
+            throw new Exception ("Server Error!", 500);
         }
 
         // Update method
@@ -487,80 +532,4 @@
         }
 
     }
-
-    Class Teacher extends Employee_User{
-        // Calls the construct function on Employee user
-        public function __construct($db){
-            parent::__construct($db);
-        }
-
-        // Register method
-        public function register(){
-            // Calls register function on Employee User
-            if(parent::register()){
-                $query = "INSERT INTO teacher (username) VALUES (:username)";
-
-                $stmt = $this->conn->prepare($query);
-
-                if($stmt->execute([
-                    "username" => $this->username
-                ])){
-                    return true;
-                }
-                return false;
-            }
-
-            return false;
-        }
-    }
-    Class Teacher_Assistant extends Employee_User{
-        private $class_name;
-
-        public function __construct($db){
-            parent::__construct($db);
-        }
-
-        // Setter for class_name
-        public function set_class_name($class_name){
-            if(empty($class_name)){
-                throw new Exception ("Class name can't be empty", 400);
-            }
-
-            // Validate class_name
-            if($class_name != "Reception Year" && 
-            $class_name != "Year 1" && 
-            $class_name != "Year 2" &&
-            $class_name != "Year 3" &&
-            $class_name != "Year 4" &&
-            $class_name != "Year 5" &&
-            $class_name != "Year 6"
-            ){
-                throw new Exception ("Enter proper class please!", 400);
-            }
-            
-            $this->class_name = $class_name;
-        }
-
-        // Register method
-        public function register(){
-
-            // Calls register function on Employee User
-            if(parent::register()){
-                $query = "INSERT INTO teacher_assistant (username, class_name) VALUES (:username, :class_name)";
-
-                $stmt = $this->conn->prepare($query);
-
-                if($stmt->execute([
-                    "username" => $this->username,
-                    "class_name" => $this->class_name
-                ])){
-                    return true;
-                }
-                return false;
-            }
-
-            return false;
-        }
-    }
-
 ?>
