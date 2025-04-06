@@ -23,10 +23,13 @@ async function read_classes() {
             <hr><h3>${elem.class_name}</h3>
             <h4>${elem.class_capacity}</h4>
             <h4>${elem.teacher_name}</h4>
-            <a href="read_teacher.html?class_name=${elem.class_name}">Show students</a>
-            <br>
             <a href="update_class.html?class_name=${elem.class_name}">Update Class</a>
             `
+            class_container.addEventListener("click", () => {
+                const params = new URLSearchParams();
+                params.append("class_name", elem.class_name);
+                location.href = "read_teacher.html?" + params.toString();
+            })
             container.appendChild(class_container);
         });
     }
