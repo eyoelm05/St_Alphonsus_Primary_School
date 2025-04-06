@@ -218,8 +218,11 @@ add_form.addEventListener("submit", async (event)=>{
     response_message.innerHTML = result.message;
 
     if(response.status == 200){
+        response_message.className = "success"
         setTimeout(() => {
             window.location.href = 'read_parent.html';
         }, 2000); 
+    }else{
+        response_message.className = "error"
     }
 })

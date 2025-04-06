@@ -19,6 +19,7 @@ login_form.addEventListener('submit', async function (event) {
     response_message.innerHTML = result.message;
 
     if(response.status == 200){
+        response_message.className = "success"
         if(result.user_type === "parent"){
             setTimeout(() => {
                 window.location.href = 'read_parent.html';

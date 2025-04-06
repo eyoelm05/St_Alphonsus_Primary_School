@@ -33,6 +33,7 @@ register_form.addEventListener("submit", async (event)=>{
     response_message.innerHTML = result.message;
 
     if(response.status == 200){
+        response_message.className = "success"
         setTimeout(() => {
             window.location.href = 'sign_in.html';
         }, 2000); 

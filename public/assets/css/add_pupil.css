@@ -16,7 +16,7 @@ body {
     align-items: center;
 }
 
-#register_form {
+#add_form {
     background-color: white;
     padding: 2rem;
     border-radius: 10px;
@@ -87,11 +87,8 @@ button:hover {
     background-color: var(--error-red);
 }
 
-
-
-
 @media (max-width: 600px) {
-    #register_form {
+    #add_form {
         padding: 1.5rem;
         margin: 10px;
     }

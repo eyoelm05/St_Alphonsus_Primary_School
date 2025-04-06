@@ -84,11 +84,7 @@ button:hover {
     color: white;
 }
 
-#response_message:empty {
-    display: none;
-}
-
-#response_message:not(:empty) {
+#response_message.success{
     background-color: var(--success-green);
 }
 
