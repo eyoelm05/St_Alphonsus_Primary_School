@@ -46,8 +46,24 @@
 
     // My custom code
     // Instantiate user class.
-    $user = new User($db);
     try{
+        // Checks user_type and employee_type to instantiate the correct user object.
+        if(empty($data->user_type)){
+            // Sends error message and code.  
+            throw new Exception ("User type can't be empty!", 400);
+        } else{
+            if($data->user_type == "parent"){
+                // Create parent user object.
+                $user = new Parent_User($db);
+            }
+            elseif($data->user_type == "employee"){
+                // Create a normal user object
+                $user = new User($db);
+            }else{
+                throw new Exception ("User type can only take values parent or employee!", 400);
+            }
+        }
+
         // Sanitize data using htmlspecialchars()
         // Use setters to set values in user object
         // If the value doesn't exist, each setter will receive null. Function of ?? null
