@@ -67,7 +67,8 @@
         echo json_encode(
             array(
                 "message" => "User logged in.",
-                "user_type" => $login_data["user_type"]
+                "user_type" => $login_data["user_type"],
+                "employee_type" => $login_data["employee_type"] ?? null
             )
         );
 

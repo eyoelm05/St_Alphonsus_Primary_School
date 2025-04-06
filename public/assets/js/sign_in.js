@@ -23,6 +23,10 @@ login_form.addEventListener('submit', async function (event) {
             setTimeout(() => {
                 window.location.href = 'read_parent.html';
             }, 2000)
+        }else if(result.employee_type === "A"){
+            setTimeout(() => {
+                window.location.href = 'to_be_approved.html';
+            }, 2000); 
         }else{
             setTimeout(() => {
                 window.location.href = 'read_teacher.html';
