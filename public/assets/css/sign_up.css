@@ -93,7 +93,6 @@ button:hover {
 @media (max-width: 600px) {
     #register_form {
         padding: 1.5rem;
-        margin: 10px;
     }
 
     h1 {

@@ -9,22 +9,21 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: var(--light-blue);
     margin: 0;
-    padding: 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 #login_form {
     background-color: white;
     padding: 2.5rem;
+    margin: 4rem;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
-    margin: 20px auto;
+    justify-self: center;
+    align-self: center;
 }
 
 h1 {
@@ -95,8 +94,7 @@ button:hover {
 
 @media (max-width: 600px) {
     #login_form {
-        padding: 1.5rem;
-        margin: 10px;
+        padding: 1.5rem;;
     }
 
     h1 {
