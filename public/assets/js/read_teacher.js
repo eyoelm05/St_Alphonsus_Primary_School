@@ -22,12 +22,16 @@ async function read_teacher() {
     }else if(response.status == 500){
         window.location.href = '500_page.html';
     }else{
+        const class_name = document.createElement("h1");
+        class_name.textContent = `Pupils in ${result.class}`;
+
+        container.appendChild(class_name);
         result.pupils.forEach(pupil => {
             const pupil_container = document.createElement('div');
             pupil_container.id = pupil.id;
             pupil_container.className = "pupil_container";
 
-            pupil_container.innerHTML = `<hr><p>${pupil.id}</p><p>${pupil.name}</p><hr>`
+            pupil_container.innerHTML = `<p class="pupil_id">${pupil.id}</p><p class="pupil_name">${pupil.name}</p>`
             container.appendChild(pupil_container);
 
             pupil_container.addEventListener("click", () => {

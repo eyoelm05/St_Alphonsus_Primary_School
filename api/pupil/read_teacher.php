@@ -45,7 +45,8 @@
 
         http_response_code(200);
         echo json_encode(array(
-            "pupils" => $data
+            "pupils" => $data,
+            "class" => $class_name
         ));
         
     }catch(Exception $e){
