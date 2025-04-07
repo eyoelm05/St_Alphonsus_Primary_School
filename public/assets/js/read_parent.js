@@ -19,7 +19,7 @@ async function read_parent() {
             pupil_container.id = pupil.id;
             pupil_container.className = "pupil_container";
 
-            pupil_container.innerHTML = `<hr><h3>${pupil.name}</h3><h4>${pupil.current_class}</h4><h4>${pupil.date_of_birth}</h4><hr>`
+            pupil_container.innerHTML = `<h3>${pupil.name}</h3><h4>${pupil.current_class}</h4><h4>${pupil.date_of_birth}</h4>`
             container.appendChild(pupil_container);
 
             pupil_container.addEventListener("click", () => {
