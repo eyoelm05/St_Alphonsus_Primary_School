@@ -1,0 +1,103 @@
+:root {
+    --primary-blue: #003C78;
+    --light-blue: #e8f0f7;
+    --hover-blue: #002855;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--light-blue);
+    margin: 0;
+    min-height: 100vh;
+}
+
+#container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+h2, h3 {
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: var(--primary-blue);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--light-blue);
+    padding-bottom: 0.75rem;
+}
+
+#name {
+    font-size: 1.8rem;
+    border-bottom: none;
+}
+
+#id {
+    background-color: var(--light-blue);
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+#update_pupil {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    left: 20%;
+}
+
+#update_pupil:hover {
+    background-color: var(--hover-blue);
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#medicals {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: none;
+}
+
+#teacher_assistant {
+    background-color: rgba(0, 60, 120, 0.05);
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
