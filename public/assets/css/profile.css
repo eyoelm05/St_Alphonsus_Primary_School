@@ -2,6 +2,7 @@
     --primary-blue: #003C78;
     --light-blue: #e8f0f7;
     --error-red: #dc3545;
+    --success-green: #28a745;
 }
 
 body {
@@ -89,6 +90,7 @@ button:hover {
     width: 100%;
     max-width: 400px;
     color: white;
+    align-self: center;
 }
 
 #response_message.success{

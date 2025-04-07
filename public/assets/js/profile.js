@@ -53,10 +53,12 @@ profile_form.addEventListener("submit", async (event) => {
 
     if(response.status == 200){
         if(result.user_type === "parent"){
+            response_message.className = "success"
             setTimeout(() => {
                 window.location.href = 'read_parent.html';
             }, 2000)
         }else{
+            response_message.className = "error"
             setTimeout(() => {
                 window.location.href = 'read_teacher.html';
             }, 2000); 
