@@ -15,3 +15,54 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.landing_page {
+    display: flex;
+    min-height: 70vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    color: var(--primary-blue);
+}
+
+a {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.buttons{
+    display: flex;
+    gap:1rem;
+}
+
+.sign_in {
+    color: var(--primary-blue);
+    background-color: #fff;
+    border: 2px solid var(--primary-blue);
+    margin-right: 1rem;
+}
+
+.sign_in:hover {
+    background-color: var(--primary-blue);
+    color: #fff;
+}
+.sign_up {
+    color: #fff;
+    background-color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    margin-right: 1rem;
+}
+
+.sign_up:hover {
+    background-color: #fff;
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+}
+
