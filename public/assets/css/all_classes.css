@@ -8,23 +8,23 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: var(--light-blue);
     margin: 0;
-    padding: 2rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
     min-height: 100vh;
 }
 
 h1{
     color: var(--primary-blue);
+    align-self: center;
 }
 
 #container {
     width: 90%;
     max-width: 1400px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 1.5rem;
+    align-self: center;
 }
 
 .class_container {
