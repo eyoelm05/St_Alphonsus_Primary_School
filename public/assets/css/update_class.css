@@ -88,18 +88,3 @@ button:hover {
     background-color: var(--error-red);
 }
 
-
-@media (max-width: 600px) {
-    #update_class_form {
-        padding: 1.5rem;
-        margin: 10px;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-    }
-
-    input, select, button {
-        padding: 0.6rem;
-    }
-}

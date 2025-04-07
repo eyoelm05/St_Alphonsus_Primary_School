@@ -8,12 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
   
 async function header() {
-    const menu = document.getElementById("menu_toggle");
     const nav_links = document.getElementById("nav_links");
-
-    menu.addEventListener("click", () => {
-        nav_links.classList.toggle('active');
-    });
 
     const response = await fetch("http://localhost/St_Alphonsus_Primary_School/api/users/check_user.php", {
         method: "GET"

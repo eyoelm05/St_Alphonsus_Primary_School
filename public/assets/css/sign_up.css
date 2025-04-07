@@ -88,19 +88,3 @@ button:hover {
     background-color: var(--error-red);
 }
 
-
-
-
-@media (max-width: 600px) {
-    #register_form {
-        padding: 1.5rem;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-    }
-
-    input, select, button {
-        padding: 0.6rem;
-    }
-}

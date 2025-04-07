@@ -34,6 +34,7 @@ h1 {
     align-items: center;
     position: relative;
     overflow: hidden;
+    animation: fadeIn 0.3s ease forwards;
 }
 
 .pupil_container:hover {
@@ -88,9 +89,5 @@ h1 {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.pupil_container {
-    animation: fadeIn 0.3s ease forwards;
 }
 

@@ -72,24 +72,3 @@ hr {
     border-top: 1px solid #ddd;
     margin: 1rem 0;
 }
-
-@media (max-width: 600px) {
-    #container{
-        width: 100%;
-    }
-    body {
-        padding: 1rem;
-    }
-
-    .class_container {
-        padding: 1rem;
-    }
-
-    .class_container h3 {
-        font-size: 1.3rem;
-    }
-
-    .class_container h4 {
-        font-size: 1rem;
-    }
-}

@@ -100,20 +100,3 @@ button:hover {
 #response_message.error {
     background-color: var(--error-red);
 }
-
-
-@media (max-width: 600px) {
-    #profile_form {
-        padding: 1.5rem;
-        margin: 10px;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-        margin-bottom: 2rem;
-    }
-
-    input, button {
-        padding: 0.75rem;
-    }
-}
