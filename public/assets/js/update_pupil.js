@@ -49,7 +49,7 @@ async function fetch_pupil() {
 
 no_medicals.addEventListener("change", () => {
     const current_values = medical_container.querySelectorAll(".medical");
-    
+
     if (no_medicals.value > current_values.length) {
         for (let i = current_values.length; i < no_medicals.value; i++) {
             const medical = document.createElement("input");
@@ -103,14 +103,11 @@ update_form.addEventListener("submit", async (event)=>{
     response_message.innerHTML = result.message;
 
     if(response.status == 200){
-        if(result.user_type === "parent"){
-            setTimeout(() => {
-                window.location.href = 'read_parent.html';
-            }, 2000)
-        }else{
-            setTimeout(() => {
-                window.location.href = 'read_teacher.html';
-            }, 2000); 
-        }
+        response_message.className = "success"
+        setTimeout(() => {
+            window.location.href = 'read_parent.html';
+        }, 2000)
+    }else{
+        response_message.className = "error"
     }
 })

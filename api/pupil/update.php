@@ -66,7 +66,6 @@
                     http_response_code(200);
                     echo json_encode(array(
                         "message" => "Pupil updated successfully!",
-                        "user_type" => $user->user_type
                     ));
                 }else{
                     throw new Exception ("Server Error!", 500);
