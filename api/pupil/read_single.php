@@ -52,7 +52,8 @@
 
         http_response_code(200);
         echo json_encode(array(
-            "pupil" => $data
+            "pupil" => $data,
+            "user_type" => $user->user_type
         ));
         
     }catch(Exception $e){

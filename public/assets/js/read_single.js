@@ -5,9 +5,9 @@ const parents = document.getElementById("parents");
 const date_of_birth = document.getElementById("date_of_birth");
 const sex = document.getElementById("sex");
 const address = document.getElementById("address");
-const class_name = document.getElementById("class")
+const class_name = document.getElementById("class");
 const class_teacher = document.getElementById("class_teacher");
-const update_pupil = document.getElementById("update_pupil");
+const update_btn = document.getElementById("update_btn");
 
 async function read_single() {
     const params = new URLSearchParams(window.location.search);
@@ -42,7 +42,14 @@ async function read_single() {
         container.appendChild(medicals)
     }
 
-    update_pupil.href = `update_pupil.html?id=${id}`
+    if(result.user_type === "parent"){
+        const update_pupil = document.createElement("a");
+        update_pupil.href = `update_pupil.html?id=${id}`;
+        update_pupil.id = "update_pupil";
+        update_pupil.textContent = "Update Pupil"
+
+        update_btn.appendChild(update_pupil);
+    }
 }
 
 read_single();
