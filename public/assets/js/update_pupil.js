@@ -47,19 +47,32 @@ async function fetch_pupil() {
     }
 }
 
-no_medicals.addEventListener("change", () =>{
-    medical_container.innerHTML = "";
-    for(i=0; i < no_medicals.value; i++){
-        const medical = document.createElement("input");
-        medical.type = "text";
-        medical.className = "medical"
-        medical.required = true;
-        medical_container.appendChild(medical);
-        medical_container.appendChild(document.createElement("br"));
-        medical_container.appendChild(document.createElement("br"));
+no_medicals.addEventListener("change", () => {
+    const current_values = medical_container.querySelectorAll(".medical");
+    
+    if (no_medicals.value > current_values.length) {
+        for (let i = current_values.length; i < no_medicals.value; i++) {
+            const medical = document.createElement("input");
+            medical.type = "text";
+            medical.className = "medical";
+            medical.required = true;
+            medical_container.appendChild(medical);
+            medical_container.appendChild(document.createElement("br"));
+            medical_container.appendChild(document.createElement("br"));
+        }
+    }else if (no_medicals.value < current_values.length) {
+        for (let i = current_values.length - 1; i >= no_medicals.value; i--) {
+            current_values[i].nextSibling.remove();
+            current_values[i].nextSibling.remove();
+            current_values[i].remove();
+        }
     }
-    update_form.insertBefore(medical_container, submit_btn)
-})
+
+    if (!update_form.contains(medical_container)) {
+        update_form.insertBefore(medical_container, submit_btn);
+    }
+});
+
 
 update_form.addEventListener("submit", async (event)=>{
     event.preventDefault();
