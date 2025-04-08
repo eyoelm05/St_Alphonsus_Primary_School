@@ -416,20 +416,41 @@
         }
 
         public function set_date_of_birth($date_of_birth){
-
             // Check if date of birth exists
             if(empty($date_of_birth)){
                 throw new Exception ("Date of birth can't be empty!", 400);
             }
 
+            // Get the current date
+            $current_date = new DateTime("now");
+            
+            // Convert inserted date to date object
+            $date_of_birth_object = date_create($date_of_birth);
+
+            // Get the difference between the date
+            $interval = date_diff($date_of_birth_object, $current_date);
+
+            if($interval->format("%y") < 18){
+                throw new Exception ("Teachers can't be under 18!", 400);
+            }
             $this->date_of_birth = $date_of_birth;
         }
 
         public function set_start_date($start_date){
-
             // Check if start date exists
             if(empty($start_date)){
                 throw new Exception ("Start date can't be empty!", 400);
+            }
+
+            // Get the current date
+            $current_date = new DateTime("now");
+
+            // Convert inserted date to date object
+            $start_date_object = date_create($start_date);
+
+            // If start date is before current date throw exception
+            if($start_date_object < $current_date){
+                throw new Exception ("Start date can't be in the past!", 400);
             }
 
             $this->start_date = $start_date;

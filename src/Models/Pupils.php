@@ -81,11 +81,25 @@
         }
 
         public function set_date_of_birth($date_of_birth){
-            //Check if date of birth exists
+            // Check if date of birth exists
             if(empty($date_of_birth)){
                 throw new Exception ("Date of birth can't be empty!", 400);
             }
 
+            // Get the current date
+            $current_date = new DateTime("now");
+            
+            // Convert inserted date to date object
+            $date_of_birth_object = date_create($date_of_birth);
+
+            // Convert inserted date to date object
+            $interval = date_diff($date_of_birth_object, $current_date);
+
+            if($interval->format("%y") < 4){
+                throw new Exception ("Your child must be at least 4 years old!", 400);
+            }elseif($interval->format("%y") > 15){
+                throw new Exception ("Your child must be under 15 years old");
+            }
             $this->date_of_birth = $date_of_birth;
         }
 
