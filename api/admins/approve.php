@@ -41,12 +41,17 @@
             $user->set_date_of_birth(htmlspecialchars($data->date_of_birth ?? null));
             $user->set_start_date(htmlspecialchars($data->start_date ?? null));
             $user->set_employee_type(htmlspecialchars($data->employee_type ?? null));
-            $user->set_class_name(htmlspecialchars($data->class_name ?? null));
 
-            if($admin->approve($user)){
+            // Data sent for teacher assistants only
+            if($data->employee_type === "TA"){
+                $user->set_class_name(htmlspecialchars($data->class_name ?? null));
+            }
+
+            $message = $admin->approve($user);
+            if($message){
                 http_response_code(200);
                 echo json_encode(array(
-                    "message" => "Employee approved!"
+                    "message" => $message
                 ));
             }else{
                 throw new Exception ("Server Error!", 500);

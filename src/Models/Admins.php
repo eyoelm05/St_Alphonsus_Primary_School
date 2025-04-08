@@ -31,10 +31,10 @@
                 // After that register employees based on there role
                 if($user->employee_type === "T"){
                     $user->register_teacher();
-                    return true;
+                    return "Employee Approved! Check update class to register teacher.";
                 }elseif($user->employee_type === "TA"){
                     $user->register_Ta();
-                    return true;
+                    return "Employee Approved!";
                 }
             }
         }
