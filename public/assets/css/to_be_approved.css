@@ -1,0 +1,103 @@
+:root {
+    --primary-blue: #003C78;
+    --light-blue: #e8f0f7;
+    --hover-blue: #002855;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--light-blue);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    color: var(--primary-blue);
+    text-align: center;
+    margin: 2rem;
+}
+
+#container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.employee_container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.employee_container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 60, 120, 0.2);
+}
+
+h3 {
+    color: var(--primary-blue);
+    margin: 0 0 0.75rem;
+    font-size: 1.4rem;
+}
+
+h4 {
+    margin: 0.25rem 0;
+    color: #555;
+    font-weight: 500;
+}
+
+.employee_container::after {
+    content: '→';
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-blue);
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.employee_container:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(5px);
+}
+
+.add_pupil {
+    background-color: var(--primary-blue);
+    color: white;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 0 auto 2rem;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.add_pupil:hover {
+    background-color: var(--hover-blue);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

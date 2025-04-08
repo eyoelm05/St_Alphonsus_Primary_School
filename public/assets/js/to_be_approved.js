@@ -20,7 +20,7 @@ async function to_be_approved() {
             employee_container.username = employee.username;
             employee_container.className = "employee_container";
 
-            employee_container.innerHTML = `<hr><p>${employee.username}</p><p>${employee.name}</p><hr>`
+            employee_container.innerHTML = `<h3>${employee.name}</h3><h4>${employee.username}</h4>`
             container.appendChild(employee_container);
 
             employee_container.addEventListener("click", () => {
