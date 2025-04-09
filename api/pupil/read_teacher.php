@@ -40,7 +40,7 @@
             $data = $class->read_class($class_name);
         }else{
             $class_name = $class->class_teacher($user->username, $user->employee_type);
-            $data = $class->read_class($class_name["class_name"]);
+            $data = $class->read_class($class_name);
         }
 
         http_response_code(200);

@@ -39,7 +39,7 @@ async function read_teacher() {
                 params.append("id", pupil_container.id);
                 location.href = "read_single.html?" + params.toString();
             })
-        });
+        })
     }
 }
 

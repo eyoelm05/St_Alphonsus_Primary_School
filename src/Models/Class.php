@@ -100,7 +100,7 @@
     
                 if($stmt->execute(["username" => $username])){
                     $class = $stmt->fetch();
-                    return $class;
+                    return $class["class_name"];
                 }else{
                     throw new Exception ("Server Error!", 500);
                 }
@@ -111,7 +111,7 @@
     
                 if($stmt->execute(["username" => $username])){
                     $class = $stmt->fetch();
-                    return $class;
+                    return $class["class_name"];
                 }else{
                     throw new Exception ("Server Error!", 500);
                 }
