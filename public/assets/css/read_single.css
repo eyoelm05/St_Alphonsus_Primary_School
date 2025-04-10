@@ -62,17 +62,13 @@ h3 {
     padding: 1rem 2rem;
     text-decoration: none;
     border-radius: 5px;
-    margin-top: 1.5rem;
     font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: relative;
-    left: 20%;
+    margin-top: 3rem;
 }
 
 #update_pupil:hover {
     background-color: var(--hover-blue);
-    transform: translateX(-50%) translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
