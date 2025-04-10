@@ -260,7 +260,13 @@
                 concat(pt.first_name, ' ',IFNULL(pt.middle_initial, ''),' ', pt.last_name) as teacher_name,
                 GROUP_CONCAT(DISTINCT concat(ppu.first_name,' ',IFNULL(ppu.middle_initial, ''), ' ' , ppu.last_name, ' ', pp.relationship) SEPARATOR '\n') as parents,
                 IFNULL(GROUP_CONCAT(DISTINCT concat(tau.first_name,' ',IFNULL(tau.middle_initial, ''), ' ' , tau.last_name) SEPARATOR ', '), '') as teacher_assistants,
-                IFNULL(GROUP_CONCAT(DISTINCT pm.medical_info SEPARATOR ', '), '') as medicals
+                IFNULL(GROUP_CONCAT(DISTINCT pm.medical_info SEPARATOR ', '), '') as medicals,
+                pb.isbn,
+                pb.borrowed_date,
+                pb.due_date,
+                pb.date_returned,
+                b.title,
+                b.author
                 FROM pupils p
                 LEFT JOIN pupil_parent pp ON p.pupil_id = pp.pupil_id
                 LEFT JOIN classes c ON p.class_name = c.class_name
@@ -270,7 +276,10 @@
                 LEFT JOIN teacher_assistant pta ON p.class_name = pta.class_name
                 LEFT JOIN users tau ON pta.username = tau.username 
                 LEFT JOIN pupil_medicals pm ON p.pupil_id = pm.pupil_id
+                LEFT JOIN borrowed_books pb ON p.pupil_id = pb.pupil_id
+                LEFT JOIN books b ON pb.isbn = b.isbn
                 WHERE p.pupil_id = :id
+                GROUP BY pb.isbn, pb.borrowed_date, pb.due_date, pb.date_returned, b.title, b.author
             ";
 
             $stmt = $this->conn->prepare($query);
@@ -278,8 +287,42 @@
             if($stmt->execute(array(
                 "id" => $id
             ))){
-                $pupil = $stmt->fetch();
+                $rows = $stmt->fetchAll();
+                $pupil = null;
+
+                foreach ($rows as $row) {
+                    if ($pupil === null) {
+                        $pupil = [
+                            'id' => $row['id'],
+                            'first_name' => $row['first_name'],
+                            'middle_initial' => $row['middle_initial'],
+                            'last_name' => $row['last_name'],
+                            'class' => $row['class'],
+                            'address' => $row['address'],
+                            'date_of_birth' => $row['date_of_birth'],
+                            'sex' => $row['sex'],
+                            'teacher_name' => $row['teacher_name'],
+                            'parents' => [],
+                            'teacher_assistants' => explode(', ', $row['teacher_assistants']),
+                            'medicals' => explode(', ', $row['medicals']),
+                            'borrowed_books' => []
+                        ];
+                    }
+
+                    if (!empty($row['isbn'])) {
+                        $pupil['borrowed_books'][] = [
+                            'isbn' => $row['isbn'],
+                            'title' => $row['title'],
+                            'author' => $row['author'],
+                            'borrowed_date' => $row['borrowed_date'],
+                            'due_date' => $row['due_date'],
+                            'date_returned' => $row['date_returned']
+                        ];
+                    }
+                }
+
                 return $pupil;
+
             }else{
                 throw new Exception ("Server Error!", 500);
             }
