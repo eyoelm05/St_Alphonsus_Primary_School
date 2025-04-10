@@ -32,11 +32,13 @@ async function header() {
             <a href="index.html">Home</a>
             <a href="to_be_approved.html">Approve teacher</a>
             <a href="all_classes.html">Classes</a>
+            <a href="checkout.html">Checkout Books</a>
             <a href="profile.html">Profile</a>`;
         } else if (result.employee_type === "T" || result.employee_type === "TA") {
         links = `
             <a href="index.html">Home</a>
             <a href="read_teacher.html">Your class</a>
+            <a href="checkout.html">Checkout Books</a>
             <a href="profile.html">Profile</a>`;
         } else {
         links = `
