@@ -7,6 +7,8 @@
         private $pupil_id;
         private $isbn;
         private $no_of_copies;
+        private $title;
+        private $author; 
 
         // Construct function connect to the database
         public function __construct($db){
@@ -32,7 +34,7 @@
             }
         }
 
-        public function set_isbn($isbn){
+        public function set_isbn_borrow($isbn){
             $query = "SELECT COUNT(*) as available_copies FROM books WHERE isbn = :isbn AND no_of_copies > 0";
         
             $stmt = $this->conn->prepare($query);
@@ -53,6 +55,35 @@
                 throw new Exception("Server Error!", 500);
             }
         }
+
+        public function set_isbn($isbn){
+            $isbn = trim($isbn);
+
+            if(empty($isbn)){
+                throw new Exception("Isbn can't be empty!", 400);
+            }
+
+            if (!preg_match('/^\d{9}[\dX]$/', $isbn) && !preg_match('/^\d{13}$/', $isbn)) {
+                throw new Exception("Invalid ISBN!", 400);
+            }
+            $this->isbn = $isbn;
+        }
+
+        public function set_title($title){
+            if(empty($title)){
+                throw new Exception("Title can't be empty!", 400);
+            }
+
+            $this->title = $title;
+        }
+
+        public function set_author($author){
+            if(empty($author)){
+                throw new Exception("Title can't be empty!", 400);
+            }
+
+            $this->author = $author;
+        } 
         
         public function fetch_books(){
             $query = "SELECT * FROM books";
@@ -65,6 +96,24 @@
             }else{
                 throw new Exception("Server Error.", 500);
             }
+        }
+
+        public function add_book(){
+            $query = "INSERT INTO pupil_parent(isbn, author, title, no_of_copies)
+                    VALUES (:isbn, :author, :title, :no_of_copies)";
+            
+            $stmt = $this->conn->prepare($query);
+
+            if($stmt->execute([
+                "isbn" => $this->isbn,
+                "author" => $this->author,
+                "title" => $this->title,
+                "no_of_copies" => $this->no_of_copies
+            ])){
+                return true;
+            }
+
+            throw new Exception ("Server Error!", 500);
         }
 
         public function borrow_books(){

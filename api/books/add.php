@@ -40,13 +40,16 @@
     $books = new Books($db);
 
     try{
-        $books->set_pupil_id(htmlspecialchars($data->pupil_id ?? null));
-        $books->set_isbn_borrow(htmlspecialchars($data->isbn ?? null));
+        // Sanitize data
+        $books->set_title(htmlspecialchars($data->title ?? null));
+        $books->set_isbn(htmlspecialchars($data->isbn ?? null));
+        $books->set_author(htmlspecialchars($data->author ?? null));
+        $books->set_no_of_copies(htmlspecialchars($data->no_of_copies ?? null));
 
-        if($books->borrow_books()){
+        if($books->add_book()){
             http_response_code(200);
             echo json_encode(array(
-                "message" => "Book checkout complete."
+                "message" => "Book added successfully!"
             ));
         }
         
