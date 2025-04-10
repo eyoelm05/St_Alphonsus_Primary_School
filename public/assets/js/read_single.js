@@ -46,10 +46,10 @@ async function read_single() {
         
         pupil.teacher_assistants.forEach(assistant => {
             if (assistant) {
-                const assistant = document.createElement("span");
-                assistant.className = "assistant";
-                assistant.textContent = assistant;
-                ta_container.appendChild(assistant);
+                const assistant_span = document.createElement("span");
+                assistant_span.className = "assistant";
+                assistant_span.textContent = assistant;
+                ta_container.appendChild(assistant_span);
             }
         });
         

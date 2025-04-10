@@ -10,8 +10,7 @@ async function to_be_approved() {
     if(response.status == 404){
         window.location.href = '404_page.html';
     }else if(response.status == 401){
-        console.log(result)
-        //window.location.href = '401_page.html';
+        window.location.href = '401_page.html';
     }else if(response.status == 500){
         window.location.href = '500_page.html';
     }else{
