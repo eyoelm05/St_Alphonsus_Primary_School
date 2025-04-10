@@ -34,6 +34,14 @@ h2 {
     padding-bottom: 0.75rem;
 }
 
+h3 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
 #name {
     font-size: 1.8rem;
     border-bottom: none;
@@ -46,14 +54,6 @@ h2 {
     border-radius: 20px;
     font-size: 1.1rem;
     margin-bottom: 1rem;
-}
-
-h3 {
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #e9ecef;
 }
 
 #update_pupil {
@@ -76,19 +76,124 @@ h3 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+#confirm_return {
+    display: block;
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 60, 120, 0.2);
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    width: 92%;
+    margin-top: 1rem;
+}
+
+#confirm_return:hover {
+    background-color: var(--hover-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 60, 120, 0.3);
+}
+
+#borrowed_books_section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--light-blue);
+}
+
+#borrowed_books {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+#card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--primary-blue);
+}
+
+#title {
+    font-weight: bold;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+#author {
+    color: #555;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+#dates {
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+}
+
+#status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.returned {
+    border-left: 4px solid #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.active {
+    border-left: 4px solid #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.overdue {
+    border-left: 4px solid #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
 #medicals {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.medical{
     color: #dc3545;
     background-color: rgba(220, 53, 69, 0.1);
-    padding: 0.75rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 5px;
-    border: none;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 #teacher_assistant {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.assistant {
     background-color: rgba(0, 60, 120, 0.05);
-    padding: 0.75rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 5px;
-    border: none;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 @keyframes fadeIn {

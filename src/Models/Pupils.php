@@ -258,7 +258,7 @@
                 p.date_of_birth,
                 p.sex,
                 concat(pt.first_name, ' ',IFNULL(pt.middle_initial, ''),' ', pt.last_name) as teacher_name,
-                GROUP_CONCAT(DISTINCT concat(ppu.first_name,' ',IFNULL(ppu.middle_initial, ''), ' ' , ppu.last_name, ' ', pp.relationship) SEPARATOR '\n') as parents,
+                GROUP_CONCAT(DISTINCT concat(pp.relationship, ' ', ppu.first_name,' ',IFNULL(ppu.middle_initial, ''), ' ' , ppu.last_name) SEPARATOR ', ') as parents,
                 IFNULL(GROUP_CONCAT(DISTINCT concat(tau.first_name,' ',IFNULL(tau.middle_initial, ''), ' ' , tau.last_name) SEPARATOR ', '), '') as teacher_assistants,
                 IFNULL(GROUP_CONCAT(DISTINCT pm.medical_info SEPARATOR ', '), '') as medicals,
                 pb.isbn,
@@ -302,7 +302,7 @@
                             'date_of_birth' => $row['date_of_birth'],
                             'sex' => $row['sex'],
                             'teacher_name' => $row['teacher_name'],
-                            'parents' => [],
+                            'parents' =>  explode(', ', $row['parents']) ,
                             'teacher_assistants' => explode(', ', $row['teacher_assistants']),
                             'medicals' => explode(', ', $row['medicals']),
                             'borrowed_books' => []
