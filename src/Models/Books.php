@@ -44,9 +44,8 @@
             ])){
                 $book = $stmt->fetch();
         
-                if ($book && $book['available_copies'] > 0) {
+                if ($book['available_copies'] > 0) {
                     $this->isbn = $isbn;
-                    $this->no_of_copies = $book['available_copies'];
                     return true;
                 } else {
                     throw new Exception("This book is currently unavailable!", 400);
@@ -129,15 +128,13 @@
                 "id" => $this->pupil_id,
                 "borrowed_date" => $date_string
             ])){
-                $query1 = "UPDATE books SET no_of_copies = :copies
+                $query1 = "UPDATE books SET no_of_copies = no_of_copies - 1
                         WHERE isbn = :isbn";
                 
-                $copies = $this->no_of_copies - 1;
 
                 $stmt1 =  $this->conn->prepare($query1);
 
                 if($stmt1->execute([
-                    "copies" => $copies,
                     "isbn" => $this->isbn
                 ])){
                     return true;
@@ -148,6 +145,59 @@
                 throw new Exception ("Server Error!", 500);
             }
         }
+
+        public function return_book() {
+            $query = "SELECT COUNT(*) AS no_of_entries 
+                      FROM borrowed_books 
+                      WHERE isbn = :isbn AND pupil_id = :id AND date_returned IS NULL;"; 
+            
+            $stmt = $this->conn->prepare($query);
+        
+            if ($stmt->execute([
+                "isbn" => $this->isbn,
+                "id" => $this->pupil_id
+            ])){
+                $count = $stmt->fetch();
+        
+                if ($count["no_of_entries"] > 0) {
+                    $query1 = "UPDATE books 
+                            SET no_of_copies = no_of_copies + 1 
+                            WHERE isbn = :isbn";
+        
+                    $stmt1 = $this->conn->prepare($query1);
+                    
+                    if($stmt1->execute([
+                        "isbn" => $this->isbn
+                    ])){
+                        $date = new DateTime("now");
+                        $date_string = date_format($date, 'Y-m-d');
+
+                        $query2 = "UPDATE borrowed_books 
+                        SET date_returned = :date 
+                        WHERE isbn = :isbn AND pupil_id = :id";
+            
+                        $stmt2 = $this->conn->prepare($query2);
+                        if( $stmt2->execute([
+                            "isbn" => $this->isbn,
+                            "id" => $this->pupil_id,
+                            "date" => $date_string
+                        ])){
+                            return true;
+                        }else{
+                            throw new Exception ("Server Error!", 500);
+                        }
+
+                    }else{
+                        throw new Exception("Server Error!", 500);
+                    }
+                } else {
+                    throw new Exception("This book wasn't borrowed by the student!", 400);
+                }
+            }
+        
+            throw new Exception("Server Error!", 500);
+        }
+        
 
     }
 ?>
