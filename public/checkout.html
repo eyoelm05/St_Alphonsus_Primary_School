@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St Alphonsus Primary school</title>
+    <link rel="stylesheet" href="assets/css/checkout.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+</head>
+<body>
+    <div id="header"></div>
+    <form id="checkout_form">
+        <h1>Checkout book</h1>
+        <label for="class_name">Pupil Class: </label>
+        <select name="class_name" id="class_name" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Reception Year">Reception Year</option>
+            <option value="Year 1">Year 1</option>
+            <option value="Year 2">Year 2</option>
+            <option value="Year 3">Year 3</option>
+            <option value="Year 4">Year 4</option>
+            <option value="Year 5">Year 5</option>
+            <option value="Year 6">Year 6</option>
+        </select>
+        <button type="submit" id="submit">Checkout</button>
+    </form>
+    <p id="response_message"></p>
+    <script src="assets/js/checkout.js" defer></script>
+    <script src="assets/js/header.js" defer></script>
+</body>
+</html>
