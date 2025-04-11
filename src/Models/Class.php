@@ -105,7 +105,7 @@
                     throw new Exception ("Server Error!", 500);
                 }
             }elseif ($user_type == "TA"){
-                $query = "SELECT class_name FROM teacher_assistants  WHERE username = :username";
+                $query = "SELECT class_name FROM teacher_assistant  WHERE username = :username";
 
                 $stmt = $this->conn->prepare($query);
     
