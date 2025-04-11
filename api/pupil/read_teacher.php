@@ -40,6 +40,9 @@
             $data = $class->read_class($class_name);
         }else{
             $class_name = $class->class_teacher($user->username, $user->employee_type);
+            if(!$class_name){
+                throw new Exception ("Class has not be assigned yet!", 400);
+            }
             $data = $class->read_class($class_name);
         }
 
