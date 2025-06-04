@@ -22,7 +22,7 @@ async function read_classes() {
             class_container.innerHTML = `
             <hr><h3>${elem.class_name}</h3>
             <h4>${elem.class_capacity}</h4>
-            <h4>${elem.teacher_name}</h4>
+            <h4>${elem.teacher_name ?? "No teacher"}</h4>
             <a href="update_class.html?class_name=${elem.class_name}">Update Class</a>
             `
             class_container.addEventListener("click", () => {

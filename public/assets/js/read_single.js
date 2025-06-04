@@ -56,7 +56,7 @@ async function read_single() {
         container.insertBefore(ta_container, borrowed_books_section);
     }
     
-    if (pupil.medicals.length > 0) {
+    if (pupil.medicals[0] !== "") {
         const medicals_container = document.createElement("div");
         medicals_container.id = "medicals";
         

@@ -21,6 +21,8 @@ async function read_teacher() {
         window.location.href = '401_page.html';
     }else if(response.status == 500){
         window.location.href = '500_page.html';
+    }else if(response.status == 400){
+        window.location.href = 'wait_approval.html';
     }else{
         const class_name = document.createElement("h1");
         class_name.textContent = `Pupils in ${result.class}`;

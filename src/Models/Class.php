@@ -100,18 +100,21 @@
     
                 if($stmt->execute(["username" => $username])){
                     $class = $stmt->fetch();
-                    return $class["class_name"];
+                    if(!$class){
+                        return false;
+                    }else{
+                        return $class["class_name"];
+                    }
                 }else{
                     throw new Exception ("Server Error!", 500);
                 }
             }elseif ($user_type == "TA"){
-                $query = "SELECT class_name FROM teacher_assistants  WHERE username = :username";
+                $query = "SELECT class_name FROM teacher_assistant  WHERE username = :username";
 
                 $stmt = $this->conn->prepare($query);
     
                 if($stmt->execute(["username" => $username])){
                     $class = $stmt->fetch();
-                    return $class["class_name"];
                 }else{
                     throw new Exception ("Server Error!", 500);
                 }

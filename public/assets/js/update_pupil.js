@@ -31,9 +31,9 @@ async function fetch_pupil() {
         document.getElementById("date_of_birth").value = result.pupil.date_of_birth;
         document.getElementById("sex").value = result.pupil.sex;
         document.getElementById("class_name").value = result.pupil.class;
-        document.getElementById("no_medicals").value = result.pupil.medicals.split(",").length;
+        document.getElementById("no_medicals").value = result.pupil.medicals.length;
 
-        result.pupil.medicals.split(",").forEach(elem => {
+        result.pupil.medicals.forEach(elem => {
             const medical = document.createElement("input");
             medical.type = "text";
             medical.className = "medical";

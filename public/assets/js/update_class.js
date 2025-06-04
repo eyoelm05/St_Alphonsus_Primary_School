@@ -29,15 +29,17 @@ async function fetch_class() {
             teacher_select.id = "teacher";
             teacher_select.name = "teacher";
             teacher_select.required = true;
-        
-            result.teachers.forEach(teacher => {
-                const elem_option = document.createElement("option");
-                elem_option.value = teacher.username;
-                elem_option.text = teacher.teacher_name;
-                teacher_select.appendChild(elem_option);
 
-                if(teacher.teacher_name === result.class.teacher_name){
-                    elem_option.selected = true;
+            result.teachers.forEach(teacher => {
+                if(teacher.username){
+                    const elem_option = document.createElement("option");
+                    elem_option.value = teacher.username;
+                    elem_option.text = teacher.teacher_name;
+                    teacher_select.appendChild(elem_option);
+
+                    if(teacher.teacher_name === result.class.teacher_name){
+                        elem_option.selected = true;
+                    }
                 }
             });
 
